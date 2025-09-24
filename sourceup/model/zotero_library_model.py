@@ -57,7 +57,7 @@ class ZoteroLibraryModel(QAbstractListModel):
             if role in (Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.ToolTipRole):
                 library_type = account.library_type.name.capitalize()
                 library_id = account.library_id
-                access_level = "private" if account.private_key else "public"
+                access_level = "Private" if account.private_key else "Public"
                 return f"{library_type} · {library_id} ({access_level})"
         return None
 

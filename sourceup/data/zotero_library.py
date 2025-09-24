@@ -9,4 +9,4 @@ class LibraryType(int, Enum):
 class ZoteroLibrary:
     library_type: LibraryType
     library_id: str
-    private_key: str
+    private_key: str | None

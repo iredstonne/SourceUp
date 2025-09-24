@@ -171,12 +171,16 @@ class ManageZoteroLibrariesWindow(QDialog):
         self._root.addWidget(self._splitter)
         self._dialog_buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel) # type: ignore
         self._dialog_buttons.rejected.connect(self.close)
-        self._dialog_buttons.accepted.connect(self.close)
+        self._dialog_buttons.accepted.connect(self.accept)
         self._root.addWidget(self._dialog_buttons)
         self._populate_library_type_combo()
         self._refresh_delete_enabled()
         self._refresh_delete_all_enabled()
         self._on_library_type_combo_changed()
+
+    @property
+    def libraries(self):
+        return self._model.rows
 
     def _populate_library_type_combo(self):
         self._library_type_combo.clear()
@@ -218,6 +222,7 @@ class ManageZoteroLibrariesWindow(QDialog):
         self._validated_private_key_input.setText(library.private_key)
 
     def _add_or_update_library(self, library: ZoteroLibrary):
+        self._list_view.setFocus()
         idx = self._list_view.currentIndex()
         if idx.isValid():
             self._model.update_row(idx.row(), library)
@@ -269,14 +274,12 @@ class ManageZoteroLibrariesWindow(QDialog):
         self._update_library_id_help_label()
 
     def _on_private_access_checkbox_toggled(self):
-        if self._private_access_checkbox.isChecked():
-            self._private_key_input_label.setVisible(True)
-            self._private_key_input.setVisible(True)
-            self._private_key_help_label.setVisible(True)
-        else:
-            self._private_key_input_label.setVisible(False)
-            self._private_key_input.setVisible(False)
-            self._private_key_help_label.setVisible(False)
+        is_private = self._private_access_checkbox.isChecked()
+        self._private_key_input_label.setVisible(is_private)
+        self._private_key_input.setVisible(is_private)
+        self._private_key_help_label.setVisible(is_private)
+        if not is_private:
+            self._private_key_input.clear()
 
     def _on_save_button_clicked(self):
         if self._validated_library_id_input.validate() != QValidator.State.Acceptable:
@@ -284,11 +287,10 @@ class ManageZoteroLibrariesWindow(QDialog):
             QMessageBox.critical(self, "Missing Library ID", "Please provide a Library ID.")
             return
         need_private_key = self._private_access_checkbox.isChecked()
-        if need_private_key:
-            if self._validated_private_key_input.validate() != QValidator.State.Acceptable:
-                self._validated_private_key_input.input.setFocus()
-                QMessageBox.critical(self, "Missing Private Key", "Please provide a Private Key.")
-                return
+        if need_private_key and self._validated_private_key_input.validate() != QValidator.State.Acceptable:
+            self._validated_private_key_input.input.setFocus()
+            QMessageBox.critical(self, "Missing Private Key", "Please provide a Private Key.")
+            return
         library_type = self._library_type_combo.currentData()
         library_id = self._library_id_input.text().strip()
         private_key = self._private_key_input.text().strip()
@@ -297,3 +299,4 @@ class ManageZoteroLibrariesWindow(QDialog):
             library_id,
             private_key if need_private_key else None,
         ))
+

@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "sourceup"
+version = "0.1.0"
+description = ""
+authors = ["iredstonne"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.14"
+pyside6 = "^6.9.2"
+
+[tool.poetry.scripts]
+sourceup = "sourceup.app:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

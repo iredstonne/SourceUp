@@ -82,11 +82,11 @@ class ValidatedLineEdit(QWidget):
             self._hide_error_indicator()
 
 class ManageZoteroLibrariesWindow(QDialog):
-    def __init__(self):
+    def __init__(self, libraries: list[ZoteroLibrary] | None = None):
         super().__init__()
         self.setWindowTitle("Manage Zotero Libraries - SourceUp")
         self.setFixedSize(1280, 720)
-        self._model = ZoteroLibraryModel()
+        self._model = ZoteroLibraryModel(libraries)
         self._root = QVBoxLayout(self)
         self._splitter = QSplitter(Qt.Orientation.Horizontal)
         self._splitter.setSizes([1, 2])
@@ -279,7 +279,7 @@ class ManageZoteroLibrariesWindow(QDialog):
         self._private_key_input.setVisible(is_private)
         self._private_key_help_label.setVisible(is_private)
         if not is_private:
-            self._private_key_input.clear()
+            self._validated_private_key_input.clear()
 
     def _on_save_button_clicked(self):
         if self._validated_library_id_input.validate() != QValidator.State.Acceptable:

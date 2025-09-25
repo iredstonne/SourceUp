@@ -8,9 +8,11 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.12,<3.14"
 pyside6 = "^6.9.2"
+pyinstaller = "^6.16.0"
 
 [tool.poetry.scripts]
 sourceup = "sourceup.app:main"
+sourceup-build = "sourceup-build:main"
 
 [build-system]
 requires = ["poetry-core"]

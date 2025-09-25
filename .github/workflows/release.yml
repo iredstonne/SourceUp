@@ -1,0 +1,41 @@
+name: Build & Release SourceUp (Windows)
+
+jobs:
+  build-and-release-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - name: Install Poetry
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+      - name: Install dependencies (with dev)
+        run: |
+          poetry install --with dev
+      - name: Build exe with PyInstaller
+        run: |
+          poetry run sourceup-build
+      - name: Rename exe
+        run: |
+          Rename-Item dist\SourceUp.exe SourceUp-windows-x64.exe
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: SourceUp-windows-x64.exe
+          body_path: RELEASE.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write

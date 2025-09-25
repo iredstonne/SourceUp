@@ -5,7 +5,7 @@ from sourceup.data.zotero_library import ZoteroLibrary
 
 class ZoteroLibraryStorage:
     def __init__(self, data: list[ZoteroLibrary] | None = None):
-        self._data: list[ZoteroLibrary] = data or []
+        self._data: list[ZoteroLibrary] = data
 
     def count(self):
         return len(self._data)
@@ -52,13 +52,10 @@ class ZoteroLibraryModel(QAbstractListModel):
 
     def data(self, idx: QModelIndex = QModelIndex(), role: int = Qt.ItemDataRole.UserRole):
         if self._is_valid_idx(idx):
-            account = self._storage.at(idx.row())
-            if role is Qt.ItemDataRole.UserRole: return account
+            library = self._storage.at(idx.row())
+            if role is Qt.ItemDataRole.UserRole: return library
             if role in (Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.ToolTipRole):
-                library_type = account.library_type.name.capitalize()
-                library_id = account.library_id
-                access_level = "Private" if account.private_key else "Public"
-                return f"{library_type} · {library_id} ({access_level})"
+                return repr(library)
         return None
 
     def flags(self, idx: QModelIndex = QModelIndex()) -> Qt.ItemFlag:

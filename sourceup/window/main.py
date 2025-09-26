@@ -65,7 +65,27 @@ def _generate_creators_node(b_source, creator_names: list[str]):
 
 
 def _generate_date_node(b_source, date: str):
-    etree.SubElement(b_source, "{%s}Year" % B_NS).text = ""
+    year = None
+    month = None
+    day = None
+    try:
+        dt = datetime.datetime.fromisoformat(date.replace("Z", "+00:00"))
+        year, month, day = dt.year, dt.month, dt.day
+    except:
+        try:
+            dt = datetime.datetime.strptime(date, "%Y-%m-%d")
+            year, month, day = dt.year, dt.month, dt.day
+        except:
+            try:
+                dt = datetime.datetime.strptime(date, "%Y")
+                year = dt.year
+            except:
+                print(f"Failed to parse date: {date}")
+                return
+
+    if year: etree.SubElement(b_source, "{%s}Year" % B_NS).text = str(year)
+    if month: etree.SubElement(b_source, "{%s}Month" % B_NS).text = str(month)
+    if day: etree.SubElement(b_source, "{%s}Day" % B_NS).text = str(day)
 
 def _generate_link_node(b_source, link: str):
     if link:
@@ -76,7 +96,7 @@ class FetcherDialog(QWidget):
         super().__init__(parent)
         self.setWindowTitle(title)
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
-        self.setWindowFlags(Qt.WindowType.Dialog | Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowTitleHint | Qt.WindowType.WindowCloseButtonHint)
+        self.setWindowFlags(Qt.WindowType.Dialog | Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowTitleHint)
         self.setContentsMargins(8, 8, 8, 8)
         self._layout = QVBoxLayout(self)
         self._label = QLabel(text, self)
@@ -115,7 +135,7 @@ class MainWindow(QMainWindow):
         self._refresh_current_library_button = QPushButton("Refresh", self)
         self._refresh_current_library_button.clicked.connect(self._on_refresh_library_button_click)
         self._toolbar.addWidget(self._refresh_current_library_button)
-        self._export_button = QPushButton("Export collection to Word BibXML", self)
+        self._export_button = QPushButton("Export collection to Word BibXML (Work in progress, not fully supported)", self)
         self._export_button.clicked.connect(self._on_export_button_click)
         self._toolbar.addWidget(self._export_button)
         self._toolbar.addStretch(1)
@@ -194,7 +214,7 @@ class MainWindow(QMainWindow):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         path, _ =  QFileDialog.getSaveFileName(self,
             "Export collection to...",
-               f"bib-{library.library_id}-{collection.key}-export-{timestamp}.xml",
+            f"bib-{library.library_id}-{collection.key}-export-{timestamp}.xml",
               "Word BibXML (*.xml)"
         )
         if not path:

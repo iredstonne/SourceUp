@@ -5,13 +5,13 @@ from sourceup.data.zotero_library import ZoteroLibrary
 
 class ZoteroLibraryStorage:
     def __init__(self, data: list[ZoteroLibrary] | None = None):
-        self._data: list[ZoteroLibrary] = data
+        self._data: list[ZoteroLibrary] = data or []
 
     def count(self):
-        return len(self._data)
+        return len(self._data or [])
 
     def all(self):
-        return list(self._data)
+        return list(self._data or [])
 
     def pop_all(self):
         self._data = []
@@ -90,4 +90,3 @@ class ZoteroLibraryModel(QAbstractListModel):
                 Qt.ItemDataRole.DisplayRole,
                 Qt.ItemDataRole.ToolTipRole
             ])
-

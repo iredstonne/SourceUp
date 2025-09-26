@@ -9,6 +9,8 @@ readme = "README.md"
 python = ">=3.12,<3.14"
 pyside6 = "^6.9.2"
 pyinstaller = "^6.16.0"
+pyzotero = "^1.6.16"
+lxml = "^6.0.2"
 
 [tool.poetry.scripts]
 sourceup = "sourceup.app:main"

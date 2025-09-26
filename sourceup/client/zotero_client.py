@@ -1,6 +1,5 @@
-import json
-
 from pyzotero import zotero
+
 from sourceup.data.zotero_collection import ZoteroCollection
 from sourceup.data.zotero_item import ZoteroItem
 from sourceup.data.zotero_library import ZoteroLibrary, LibraryType
@@ -33,19 +32,18 @@ def fetch_items_from_collection(library: ZoteroLibrary, collection: ZoteroCollec
     for item in z.everything(z.collection_items(collection.key)):
         key = (item.get("key") or "").strip()
         data = (item.get("data") or {})
-        #print(json.dumps(data, indent=4))
         title = (data.get("title") or "").strip()
         creators = (data.get("creators") or [])
         creators_names = []
         for creator in creators:
-            if isinstance(creator, dict):
+            if not isinstance(creator, dict):
                 continue
             creator_name = (creator.get("name") or "").strip()
             if creator_name:
                 creators_names.append(creator_name)
                 continue
-            first_name = (creator.get("first_name") or "").strip()
-            last_name = (creator.get("last_name") or "").strip()
+            first_name = (creator.get("firstName") or "").strip()
+            last_name = (creator.get("lastName") or "").strip()
             creator_name = first_name + " " + last_name
             if creator_name:
                 creators_names.append(creator_name)

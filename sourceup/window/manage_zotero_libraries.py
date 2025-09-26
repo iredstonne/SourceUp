@@ -82,8 +82,8 @@ class ValidatedLineEdit(QWidget):
             self._hide_error_indicator()
 
 class ManageZoteroLibrariesWindow(QDialog):
-    def __init__(self, libraries: list[ZoteroLibrary] | None = None):
-        super().__init__()
+    def __init__(self, libraries: list[ZoteroLibrary] | None = None, parent=None):
+        super().__init__(parent)
         self.setWindowTitle("Manage Zotero Libraries - SourceUp")
         self.setFixedSize(1280, 720)
         self._model = ZoteroLibraryModel(libraries)
@@ -95,6 +95,7 @@ class ManageZoteroLibrariesWindow(QDialog):
         self._list_panel = QVBoxLayout(self._list_panel_host)
         self._list_view = QListView()
         self._list_view.setSelectionMode(QListView.SelectionMode.SingleSelection)
+        self._list_view.setEditTriggers(QListView.EditTrigger.NoEditTriggers)
         self._list_view.setModel(self._model)
         self._list_view.selectionModel().currentChanged.connect(self._on_list_selection_changed)
         self._list_panel.addWidget(self._list_view)
@@ -236,12 +237,12 @@ class ManageZoteroLibrariesWindow(QDialog):
     def _update_library_id_help_label(self):
         if self._library_type_combo.currentData() == LibraryType.USER:
             self._library_id_help_label.setText(
-                "Copy your User Library ID from your "
+                "You can copy your User Library ID from your "
                 "<a href='https://www.zotero.org/settings/keys'>Zotero account settings</a>"
             )
         else:
             self._library_id_help_label.setText(
-                "Copy the Group Library ID from your group's page in "
+                "You can copy the Group Library ID from your group's page in "
                 "<a href='https://www.zotero.org/groups/'>Zotero groups</a>."
             )
 

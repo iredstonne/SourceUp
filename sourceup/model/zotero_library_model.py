@@ -5,7 +5,7 @@ from sourceup.data.zotero_library import ZoteroLibrary
 
 class ZoteroLibraryStorage:
     def __init__(self, data: list[ZoteroLibrary] | None = None):
-        self._data: list[ZoteroLibrary] = data or []
+        self._data: list[ZoteroLibrary] = data
 
     def count(self):
         return len(self._data or [])

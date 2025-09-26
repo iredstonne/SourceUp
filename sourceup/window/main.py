@@ -3,10 +3,9 @@ import traceback
 
 from lxml import etree
 
-from PySide6.QtCore import Qt, QModelIndex, QThread, QObject, Signal, QUrl
-from PySide6.QtGui import QDesktopServices
+from PySide6.QtCore import Qt, QModelIndex, QThread, QObject, Signal
 from PySide6.QtWidgets import QMainWindow, QPushButton, QDialog, QComboBox, QLabel, QWidget, QHBoxLayout, \
-    QVBoxLayout, QMessageBox, QSplitter, QListView, QTableView, QProgressDialog, QSizePolicy, QProgressBar, QLayout, \
+    QVBoxLayout, QMessageBox, QSplitter, QListView, QTableView, QSizePolicy, QProgressBar, \
     QFileDialog, QHeaderView
 
 from sourceup.client.zotero_client import fetch_collections, fetch_items_from_collection

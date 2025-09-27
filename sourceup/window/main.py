@@ -213,7 +213,7 @@ class MainWindow(QMainWindow):
     def _export_all_items_from_collection(self, library: ZoteroLibrary, collection: ZoteroCollection):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         path, _ =  QFileDialog.getSaveFileName(self,
-            "Export collection to...",
+            "Export collection as...",
             f"bib-{library.library_id}-{collection.key}-export-{timestamp}.xml",
               "Word BibXML (*.xml)"
         )
@@ -238,9 +238,9 @@ class MainWindow(QMainWindow):
                 _generate_link_node(b_source, link)
             b_tree = etree.ElementTree(b_root)
             b_tree.write(path, encoding="utf-8", xml_declaration=True, pretty_print=True)
-            QMessageBox.information(self, "Export library", "Exporting to Word BibXML done.")
+            QMessageBox.information(self, "Export collection", "Exporting to Word BibXML done.")
         except etree.SerialisationError as e:
-            QMessageBox.critical(self, "Export library", f"Couldn't serialize items to Word BibXML: \n {str(e)}")
+            QMessageBox.critical(self, "Export collection", f"Couldn't serialize items to Word BibXML: \n {str(e)}")
         except OSError as e:
             QMessageBox.critical(self, "Export library", f"Couldn't write Word BibXML file:\n {str(e)}.")
 

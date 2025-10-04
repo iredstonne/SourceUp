@@ -5,12 +5,14 @@ class LibraryType(int, Enum):
     USER = auto()
     GROUP = auto()
 
-@dataclass
+@dataclass(frozen=True, slots=True)
 class ZoteroLibrary:
     library_type: LibraryType
-    library_id: str
+    id: str
     private_key: str | None
 
     def __repr__(self):
-        access_level = "Private" if self.private_key else "Public"
-        return f"{self.library_type.name.capitalize()} · {self.library_id} ({access_level})"
+        return f"ZoteroLibrary({self.library_type.name}, {self.id}, {"Private" if self.private_key else "Public"})"
+
+    def __str__(self):
+        return self.__repr__()

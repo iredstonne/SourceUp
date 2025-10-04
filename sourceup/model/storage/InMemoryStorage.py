@@ -19,19 +19,19 @@ class InMemoryStorage(StorageProtocol[T]):
     def reset(self) -> None:
         self.fill([])
 
-    def fill(self, data: Iterable[T]) -> None:
-        self._items = list(data)
+    def fill(self, items: Iterable[T]) -> None:
+        self._items = list(items)
 
-    def append(self, data: T) -> None:
-        self._items.append(data)
+    def append(self, item: T) -> None:
+        self._items.append(item)
 
     def remove_at(self, row: int) -> None:
         if self.in_bounds(row):
             self._items.pop(row)
 
-    def replace_at(self, row: int, data: T) -> None:
+    def replace_at(self, row: int, item: T) -> None:
         if self.in_bounds(row):
-            self._items[row] = data
+            self._items[row] = item
 
     def at(self, row: int) -> Optional[T]:
         return self._items[row] if self.in_bounds(row) else None

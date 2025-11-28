@@ -44,6 +44,6 @@ class ZoteroItemType(StrEnum):
     UNKNOWN = "unknown"
 
     @classmethod
-    def _missing_(cls, value: object) -> "ZoteroItemType":
-        warnings.warn(f"Unhandled item type: {value!r}")
+    def _missing_(cls, _value: object) -> "ZoteroItemType":
+        warnings.warn(f"Unhandled item type: {_value!r}")
         return ZoteroItemType.UNKNOWN

@@ -1,7 +1,7 @@
-import signal
 import sys
+import signal
 from PySide6.QtWidgets import QApplication
-from sourceup.window.main import MainWindow
+from sourceup.ui.window.MainWindow import MainWindow
 
 def main():
     signal.signal(signal.SIGINT, signal.SIG_DFL)

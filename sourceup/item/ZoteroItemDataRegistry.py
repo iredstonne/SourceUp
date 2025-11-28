@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Tuple, Type
 if TYPE_CHECKING: from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
-from sourceup.item.data import ZoteroStatuteItemData
+from sourceup.item.data.ZoteroStatuteItemData import ZoteroStatuteItemData
 from sourceup.item.data.ZoteroBillItemData import ZoteroBillItemData
 from sourceup.item.data.ZoteroCaseItemData import ZoteroCaseItemData
 from sourceup.item.data.ZoteroHearingItemData import ZoteroHearingItemData

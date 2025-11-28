@@ -9,8 +9,6 @@ from sourceup.library.ZoteroLibrary import ZoteroLibrary
 from sourceup.library.ZoteroLibraryType import ZoteroLibraryType
 from sourceup.ui.model.ZoteroLibraryListModel import ZoteroLibraryListModel
 
-
-# TODO: Refactor
 class ZoteroManageLibrariesDialogView(QWidget):
     def __init__(self, initial_libraries, parent: Optional[QWidget] =None):
         super().__init__(parent)
@@ -112,7 +110,8 @@ class ZoteroManageLibrariesDialogView(QWidget):
         _row_count = self._list_model.rowCount()
         if self._confirm_undoable_action(
             "Delete all",
-            f"Delete {_row_count} {"libraries" if _row_count > 1 else "library"}?\n"
+            f"Delete {_row_count}"
+            f"{"libraries" if _row_count > 1 else "library"}?\n"
             "This can't be undone",
         ):
             self._list_model.set_rows([])

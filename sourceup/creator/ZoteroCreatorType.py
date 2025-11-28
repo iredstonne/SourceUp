@@ -1,7 +1,6 @@
 import warnings
 from enum import StrEnum
 
-
 class ZoteroCreatorType(StrEnum):
     ARTIST = "artist"
     ATTORNEY_AGENT = "attorneyAgent"
@@ -35,6 +34,6 @@ class ZoteroCreatorType(StrEnum):
     UNKNOWN = "unknown"
 
     @classmethod
-    def _missing_(cls, value: object) -> "ZoteroCreatorType":
-        warnings.warn(f"Unhandled creator type: {value!r}")
+    def _missing_(cls, _value: object) -> "ZoteroCreatorType":
+        warnings.warn(f"Unhandled creator type: {_value!r}")
         return ZoteroCreatorType.UNKNOWN

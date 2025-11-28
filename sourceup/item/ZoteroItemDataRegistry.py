@@ -1,5 +1,14 @@
 from typing import TYPE_CHECKING, Tuple, Type
 if TYPE_CHECKING: from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
+from sourceup.item.data import ZoteroStatuteItemData
+from sourceup.item.data.ZoteroBillItemData import ZoteroBillItemData
+from sourceup.item.data.ZoteroCaseItemData import ZoteroCaseItemData
+from sourceup.item.data.ZoteroHearingItemData import ZoteroHearingItemData
+from sourceup.item.data.ZoteroLetterItemData import ZoteroLetterItemData
+from sourceup.item.data.ZoteroMapItemData import ZoteroMapItemData
+from sourceup.item.data.ZoteroNoteItemData import ZoteroNoteItemData
+from sourceup.item.data.ZoteroPatentItemData import ZoteroPatentItemData
+from sourceup.item.data.ZoteroStandardItemData import ZoteroStandardItemData
 from sourceup.item.data.ZoteroBookItemData import ZoteroBookItemData
 from sourceup.item.data.ZoteroBookSectionItemData import ZoteroBookSectionItemData
 from sourceup.item.data.ZoteroManuscriptItemData import ZoteroManuscriptItemData
@@ -38,6 +47,11 @@ class ZoteroItemDataRegistry:
         ZoteroManuscriptItemData,
         ZoteroThesisItemData,
         ZoteroReportItemData,
+        ZoteroDocumentItemData,
+        ZoteroStandardItemData,
+        ZoteroPatentItemData,
+        ZoteroPreprintItemData,
+        ZoteroDictionaryEntryItemData,
         ZoteroEncyclopediaArticleItemData,
         ZoteroJournalArticleItemData,
         ZoteroNewspaperArticleItemData,
@@ -59,8 +73,12 @@ class ZoteroItemDataRegistry:
         ZoteroInstantMessageItemData,
         ZoteroDatasetItemData,
         ZoteroComputerProgramItemData,
-        ZoteroDocumentItemData,
+        ZoteroHearingItemData,
+        ZoteroStatuteItemData,
+        ZoteroCaseItemData,
+        ZoteroBillItemData,
+        ZoteroMapItemData,
+        ZoteroLetterItemData,
         ZoteroAttachmentItemData,
-        ZoteroPreprintItemData,
-        ZoteroDictionaryEntryItemData
+        ZoteroNoteItemData,
     )

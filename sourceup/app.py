@@ -1,16 +1,25 @@
 import sys
 import signal
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
+from pathlib import Path
+from sourceup.manifest import (
+    APP_NAME,
+    APP_VERSION_TAG_NAME
+)
 from sourceup.ui.window.MainWindow import MainWindow
+
+MODULE_BASE_PATH = Path(__file__).resolve().parent
+ICON_PATH = MODULE_BASE_PATH / "assets" / "favicon.ico"
 
 def main():
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     signal.signal(signal.SIGTERM, signal.SIG_DFL)
     app = QApplication()
-    app.setApplicationName("SourceUp")
-    app.setApplicationVersion("0.1.0")
-    app.setOrganizationName("SourceUp")
-    main_window = MainWindow()
+    app.setApplicationName(APP_NAME)
+    app.setApplicationVersion(APP_VERSION_TAG_NAME)
+    app.setWindowIcon(QIcon(str(ICON_PATH)))
+    main_window = MainWindow(app)
     main_window.show()
     sys.exit(app.exec())
 

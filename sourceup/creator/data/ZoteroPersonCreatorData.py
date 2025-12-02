@@ -30,10 +30,10 @@ class ZoteroPersonCreatorData(ZoteroBaseCreatorData):
         _person_element = create_bibliography_namespaced_element("Person")
         if self.first_name:
             _first_element = create_bibliography_namespaced_element("First")
-            _first_element.text = self.first_name
+            _first_element.text = str(self.first_name)
             _person_element.append(_first_element)
         if self.last_name:
             _last_element = create_bibliography_namespaced_element("Last")
-            _last_element.text = self.last_name
+            _last_element.text = str(self.last_name)
             _person_element.append(_last_element)
         _author_element.append(_person_element)

@@ -1,12 +1,11 @@
 from typing import Optional, List, Iterable
 from PySide6.QtCore import QModelIndex, QSignalBlocker, QAbstractListModel
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QPushButton, QListView,
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QPushButton, QListView,
     QSplitter, QMessageBox, QDialog, QSizePolicy, QFileDialog
 )
 from sourceup.client.zotero_functions import fetch_collections, fetch_collection_items, decipher_client_error
-from sourceup.exporter.bibxml.WordBibXMLExporter import WordBibXMLExporter
-from sourceup.exporter.bibxml_functions import decipher_bibxml_export_error, export_items_as_bibxml
+from sourceup.exporter.wordbibxml_functions import decipher_bibxml_export_error, export_as_bibxml_to_output_file
 from sourceup.library.ZoteroLibrary import ZoteroLibrary
 from sourceup.collection.ZoteroCollection import ZoteroCollection
 from sourceup.item.ZoteroItem import ZoteroItem
@@ -23,9 +22,9 @@ from sourceup.ui.window.ZoteroManageLibrariesDialog import ZoteroManageLibraries
 from sourceup.ui.widget.ZoteroItemDataPreviewWidget import ZoteroItemDataPreviewWidget
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent: Optional[QWidget] = None):
+    def __init__(self, app: QApplication, parent: Optional[QWidget] = None):
         super().__init__(parent)
-        self.setWindowTitle("SourceUp")
+        self.setWindowTitle(f"{app.applicationName()} {app.applicationVersion()}")
         self.resize(1280, 720)
         self._libraries: list[ZoteroLibrary] = []
         self._selected_library: Optional[ZoteroLibrary] = None
@@ -39,7 +38,6 @@ class MainWindow(QMainWindow):
             self,
             WordBibXMLExportDialogBackgroundJobPresentation()
         )
-        self._word_bibxml_exporter = WordBibXMLExporter()
         self._build_root()
 
     def _build_root(self):
@@ -271,8 +269,9 @@ class MainWindow(QMainWindow):
         if _output_file_save_dialog.exec() != QFileDialog.DialogCode.Accepted:
             return
         _output_file_save_path = _output_file_save_dialog.selectedFiles()[0]
+
         self._word_bibxml_export_background_job_runner.run(
-            export_items_as_bibxml,
+            export_as_bibxml_to_output_file,
             self._on_export_collection_items_as_word_bibxml_worker_fn_finished,
             self._on_export_collection_items_as_word_bibxml_worker_fn_error,
             _selected_collection_items, _output_file_save_path

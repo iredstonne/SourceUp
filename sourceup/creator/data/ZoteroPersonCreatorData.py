@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from typing import Dict, Any, override
-
+from xml.etree.ElementTree import Element
 from sourceup.creator.ZoteroBaseCreatorData import ZoteroBaseCreatorData
 from sourceup.casts import map_to_str
+from sourceup.exporter.wordbibxml_functions import create_bibliography_namespaced_element
 
 @dataclass(frozen=True, slots=True)
 class ZoteroPersonCreatorData(ZoteroBaseCreatorData):
@@ -21,6 +22,18 @@ class ZoteroPersonCreatorData(ZoteroBaseCreatorData):
 
     @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroPersonCreatorData":
-        first_name = map_to_str(_data.get("firstName"))
-        last_name = map_to_str(_data.get("lastName"))
-        return cls(first_name, last_name)
+        _first_name = map_to_str(_data.get("firstName"))
+        _last_name = map_to_str(_data.get("lastName"))
+        return cls(_first_name, _last_name)
+
+    def map_to_bibxml(self, _author_element: Element):
+        _person_element = create_bibliography_namespaced_element("Person")
+        if self.first_name:
+            _first_element = create_bibliography_namespaced_element("First")
+            _first_element.text = self.first_name
+            _person_element.append(_first_element)
+        if self.last_name:
+            _last_element = create_bibliography_namespaced_element("Last")
+            _last_element.text = self.last_name
+            _person_element.append(_last_element)
+        _author_element.append(_person_element)

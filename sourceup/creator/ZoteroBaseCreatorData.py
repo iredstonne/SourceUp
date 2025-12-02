@@ -1,4 +1,6 @@
 from typing import Dict, Any
+from xml.etree.ElementTree import Element
+
 
 class ZoteroBaseCreatorData:
     def display_name(self) -> str:
@@ -10,4 +12,7 @@ class ZoteroBaseCreatorData:
 
     @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroBaseCreatorData":
+        raise NotImplementedError
+
+    def map_to_bibxml(self, _author_element: Element) -> Element:
         raise NotImplementedError

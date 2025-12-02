@@ -13,11 +13,11 @@ class ZoteroItemDataCache:
     def _build_item_data_memo(self) -> Dict[str, Type["ZoteroBaseItemData"]]:
         _item_data_memo = {}
         for item_data_cls in self._REGISTRY.ENTRIES:
-            print(item_data_cls)
             _item_type_key = normalize_str_case_insensitive(item_data_cls.item_type())
             if _item_type_key in _item_data_memo:
                 raise ValueError(f"Duplicate Zotero item type '{_item_type_key}' in {item_data_cls.__name__}")
             _item_data_memo[_item_type_key] = item_data_cls
+            print("Adding item type " + item_data_cls.__name__ + " to cache memo")
         return _item_data_memo
 
     def resolve_item_data_from_memo(self, _item_type: str) -> Optional[Type["ZoteroBaseItemData"]]:

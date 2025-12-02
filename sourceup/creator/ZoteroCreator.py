@@ -15,8 +15,8 @@ class ZoteroCreator:
 
     @property
     def is_organization(self) -> bool:
-        from sourceup.creator.data.ZoteroOrganizationCreatorData import ZoteroOrganizationCreatorData
-        return isinstance(self.creator_data, ZoteroOrganizationCreatorData)
+        from sourceup.creator.data.ZoteroCorporateCreatorData import ZoteroCorporateCreatorData
+        return isinstance(self.creator_data, ZoteroCorporateCreatorData)
 
     @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroCreator":

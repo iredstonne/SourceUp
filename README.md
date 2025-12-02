@@ -1,5 +1,5 @@
 # SourceUp
-**Source Up** is a desktop app that helps you export Zotero library to a Word-friendly bibliography format (XML)
+**SourceUp** is a desktop app that helps you export Zotero library to a Word-friendly bibliography format (XML)
 
 ## 📦 Installation
 ### Option 1: Prebuilt Packages (WIP)

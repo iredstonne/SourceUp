@@ -1,0 +1,7 @@
+ORGANIZATION_NAME = "iredstonne"
+APP_NAME = "SourceUp"
+APP_VERSION_TAG_NAME = "v1.0.0"
+GITHUB_REPO = f"{ORGANIZATION_NAME}/{APP_NAME}"
+GITHUB_REPO_URL = f"https://github.com/{GITHUB_REPO}"
+GITHUB_REPO_RELEASES_URL = f"{GITHUB_REPO_URL}/"
+GITHUB_API_REPO_LATEST_RELEASE_URL = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"

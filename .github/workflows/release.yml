@@ -1,8 +1,21 @@
 name: Build & Release SourceUp (Windows)
 
+on:
+  push:
+    tags:
+      - "v*"
+      - "v*-*"
+      - "pre-v*"
+
+permissions:
+  contents: write
+
 jobs:
   build-and-release-windows:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -10,6 +23,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.12
+          cache: "pip"
       - name: Install Poetry
         run: |
           python -m pip install --upgrade pip
@@ -17,12 +31,17 @@ jobs:
       - name: Install dependencies (with dev)
         run: |
           poetry install --with dev
-      - name: Build exe with PyInstaller
+      - name: Build executable with PyInstaller
         run: |
           poetry run sourceup-build
-      - name: Rename exe
+      - name: Ensure executable was built
         run: |
-          Rename-Item dist\SourceUp.exe SourceUp-windows-x64.exe
+          if (!(Test-Path "dist\SourceUp.exe")) {
+            Write-Error "SourceUp.exe not found in dist/"
+          }
+      - name: Rename executable for release
+        run: |
+          Move-Item "dist\SourceUp.exe" "SourceUp-windows-x64.exe" -Force
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -31,11 +50,3 @@ jobs:
           body_path: RELEASE.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-on:
-  push:
-    tags:
-      - "v*"
-
-permissions:
-  contents: write

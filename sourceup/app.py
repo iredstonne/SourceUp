@@ -7,6 +7,7 @@ from sourceup.manifest import (
     APP_NAME,
     APP_VERSION_TAG_NAME
 )
+from sourceup.updater import check_if_new_update_is_available
 from sourceup.ui.window.MainWindow import MainWindow
 
 MODULE_BASE_PATH = Path(__file__).resolve().parent
@@ -19,6 +20,7 @@ def main():
     app.setApplicationName(APP_NAME)
     app.setApplicationVersion(APP_VERSION_TAG_NAME)
     app.setWindowIcon(QIcon(str(ICON_PATH)))
+    check_if_new_update_is_available(APP_VERSION_TAG_NAME)
     main_window = MainWindow(app)
     main_window.show()
     sys.exit(app.exec())

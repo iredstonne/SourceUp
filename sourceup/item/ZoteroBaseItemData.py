@@ -38,6 +38,10 @@ class ZoteroBaseItemData:
         raise NotImplementedError("No item type specified")
 
     @classmethod
+    def bibliography_source_type(cls):
+        raise NotImplementedError("No bibliography source type specified")
+
+    @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroBaseItemData":
         return cls(
             title=map_to_str(_data.get("title")),
@@ -57,6 +61,10 @@ class ZoteroBaseItemData:
         )
 
     def map_to_bibxml(self, _source_element: Element):
+        _source_type_element = create_bibliography_namespaced_element("SourceType")
+        _source_type_element.text = self.bibliography_source_type()
+        _source_element.append(_source_type_element)
+
         if self.title:
             # <b:Title>
             _title_element = create_bibliography_namespaced_element("Title")

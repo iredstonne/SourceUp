@@ -27,6 +27,6 @@ class ZoteroCorporateCreatorData(ZoteroBaseCreatorData):
         _corporate_element = create_bibliography_namespaced_element("Corporate")
         if self.name:
             _name_element = create_bibliography_namespaced_element("Name")
-            _name_element.text = self.name
+            _name_element.text = str(self.name)
             _corporate_element.append(_name_element)
         _author_element.append(_corporate_element)

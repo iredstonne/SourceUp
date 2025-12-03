@@ -10,8 +10,10 @@ from sourceup.manifest import (
 from sourceup.updater import check_if_new_update_is_available
 from sourceup.ui.window.MainWindow import MainWindow
 
-MODULE_BASE_PATH = Path(__file__).resolve().parent
-ICON_PATH = MODULE_BASE_PATH / "assets" / "favicon.ico"
+def assets_path() -> Path:
+    return Path(__file__).resolve().parent / "assets"
+
+ICON_PATH = assets_path() / "icon.png"
 
 def main():
     signal.signal(signal.SIGINT, signal.SIG_DFL)

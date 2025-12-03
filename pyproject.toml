@@ -15,7 +15,7 @@ dateparser = "^1.2.2"
 
 [tool.poetry.scripts]
 sourceup = "sourceup.app:main"
-sourceup-build = "sourceup.build:main"
+sourceup-package = "sourceup-package:main"
 
 [build-system]
 requires = ["poetry-core"]

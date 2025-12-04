@@ -1,9 +1,9 @@
 from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
 from xml.etree.ElementTree import Element
-from sourceup.exporter.wordbibxml_functions import create_bibliography_namespaced_element
-from sourceup.item.ZoteroItemType import ZoteroItemType
+from sourceup.exporter.wordbibxml_functions import add_common_book_bibliography_namespaced_element
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
+from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.casts import map_to_str
 
 @dataclass(frozen=True, slots=True)
@@ -50,41 +50,13 @@ class ZoteroBookItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         super().map_to_bibxml(_source_element)
 
-        # NOTE: Series is not available in BibXML
-
-        # NOTE: Series Number is not available in BibXML
-
-        if self.volume:
-            _volume_element = create_bibliography_namespaced_element("Volume")
-            _volume_element.text = str(self.volume)
-            _source_element.append(_volume_element)
-
-        if self.number_of_volumes:
-            _number_volumes_element = create_bibliography_namespaced_element("NumberVolumes")
-            _number_volumes_element.text = str(self.number_of_volumes)
-            _source_element.append(_number_volumes_element)
-
-        if self.edition:
-            _edition_element = create_bibliography_namespaced_element("Edition")
-            _edition_element.text = str(self.edition)
-            _source_element.append(_edition_element)
-
-        if self.place:
-            _city_element = create_bibliography_namespaced_element("City")
-            _city_element.text = str(self.place)
-            _source_element.append(_city_element)
-
-        if self.publisher:
-            _publisher_element = create_bibliography_namespaced_element("Publisher")
-            _publisher_element.text = str(self.publisher)
-            _source_element.append(_publisher_element)
-
-        if self.num_pages:
-            _pages_element = create_bibliography_namespaced_element("Pages")
-            _pages_element.text = str(self.num_pages)
-            _source_element.append(_pages_element)
-
-        if self.isbn:
-            _isbn_element = create_bibliography_namespaced_element("StandardNumber")
-            _isbn_element.text = str(self.isbn)
-            _source_element.append(_isbn_element)
+        add_common_book_bibliography_namespaced_element(
+            _source_element,
+            _volume=self.volume,
+            _number_volumes=self.number_of_volumes,
+            _edition=self.edition,
+            _city=self.place,
+            _publisher=self.publisher,
+            _pages=self.num_pages,
+            _standard_number=self.isbn
+        )

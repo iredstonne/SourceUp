@@ -18,6 +18,11 @@ class ZoteroWebpageItemData(ZoteroBaseItemData):
 
     @override
     @classmethod
+    def bibliography_source_type(cls):
+        return "DocumentFromInternetSite"
+
+    @override
+    @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroWebpageItemData":
         _base_item_data = ZoteroBaseItemData.map_from_data(_data)
         return cls(

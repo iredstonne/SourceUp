@@ -1,7 +1,6 @@
 from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
 from xml.etree.ElementTree import Element
-
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str

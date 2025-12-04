@@ -46,6 +46,7 @@ class ZoteroReportItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
+        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.report_type)
         add_bibliography_namespaced_element_if_missing(_source_element, "Number", self.report_number)
         add_bibliography_namespaced_element_if_missing(_source_element, "Institution", self.institution)
         add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)

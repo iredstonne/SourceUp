@@ -25,8 +25,5 @@ class ZoteroCorporateCreatorData(ZoteroBaseCreatorData):
 
     def map_to_bibxml(self, _author_element: Element):
         _corporate_element = create_bibliography_namespaced_element("Corporate")
-        if self.name:
-            _name_element = create_bibliography_namespaced_element("Name")
-            _name_element.text = str(self.name)
-            _corporate_element.append(_name_element)
+        _corporate_element.text = str(self.name)
         _author_element.append(_corporate_element)

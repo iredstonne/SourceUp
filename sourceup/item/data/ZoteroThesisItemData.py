@@ -44,3 +44,4 @@ class ZoteroThesisItemData(ZoteroBaseItemData):
         add_bibliography_namespaced_element_if_missing(_source_element, "Institution", self.university)
         add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
         add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.num_pages)
+

@@ -37,7 +37,7 @@ class ZoteroBookSectionItemData(ZoteroBaseItemData):
         _base_item_data = ZoteroBaseItemData.map_from_data(_data)
         return cls(
             **{_base_item_data_field.name: getattr(_base_item_data, _base_item_data_field.name)
-               for _base_item_data_field in fields(ZoteroBookItemData)},
+               for _base_item_data_field in fields(ZoteroBaseItemData)},
             book_title=map_to_str(_data.get("bookTitle")),
             series=map_to_str(_data.get("series")),
             series_number=map_to_str(_data.get("seriesNumber")),
@@ -52,7 +52,7 @@ class ZoteroBookSectionItemData(ZoteroBaseItemData):
 
     @override
     def map_to_bibxml(self, _source_element: Element):
-        super().map_to_bibxml(_source_element)
+        ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
         add_bibliography_namespaced_element_if_missing(
             _source_element,

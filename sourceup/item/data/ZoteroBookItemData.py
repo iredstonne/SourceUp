@@ -48,7 +48,7 @@ class ZoteroBookItemData(ZoteroBaseItemData):
 
     @override
     def map_to_bibxml(self, _source_element: Element):
-        super().map_to_bibxml(_source_element)
+        ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
         add_common_book_bibliography_namespaced_element(
             _source_element,

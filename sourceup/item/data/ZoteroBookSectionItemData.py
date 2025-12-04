@@ -5,7 +5,6 @@ from sourceup.exporter.wordbibxml_functions import add_common_book_bibliography_
     add_bibliography_namespaced_element_if_missing
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.item.ZoteroItemType import ZoteroItemType
-from sourceup.item.data.ZoteroBookItemData import ZoteroBookItemData
 from sourceup.casts import map_to_str
 
 @dataclass(frozen=True, slots=True)

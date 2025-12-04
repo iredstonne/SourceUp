@@ -73,13 +73,13 @@ class ZoteroBaseItemData:
 
         if self.creators:
             # <b:Authors>
-            _authors_element = create_bibliography_namespaced_element("Authors")
+            _author_list_element = create_bibliography_namespaced_element("Author")
             for _creator in self.creators:
                 # <b:Author>
                 _author_element = create_bibliography_namespaced_element("Author")
                 _creator.creator_data.map_to_bibxml(_author_element)
-                _authors_element.append(_author_element)
-            _source_element.append(_authors_element)
+                _author_list_element.append(_author_element)
+            _source_element.append(_author_list_element)
 
         if self.abstract_note:
             # <b:Abstract>

@@ -46,19 +46,14 @@ class ZoteroBookSectionItemData(ZoteroBaseItemData):
             place=map_to_str(_data.get("place")),
             publisher=map_to_str(_data.get("publisher")),
             pages=map_to_str(_data.get("pages")),
-            isbn=map_to_str(_data.get("isbn"))
+            isbn=map_to_str(_data.get("ISBN"))
         )
 
     @override
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(
-            _source_element,
-            "BookTitle",
-            self.book_title
-        )
-
+        add_bibliography_namespaced_element_if_missing(_source_element,"BookTitle", self.book_title)
         add_common_book_bibliography_namespaced_elements(
             _source_element,
             _volume=self.volume,
@@ -69,3 +64,4 @@ class ZoteroBookSectionItemData(ZoteroBaseItemData):
             _pages=self.pages,
             _standard_number=self.isbn
         )
+

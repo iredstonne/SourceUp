@@ -1,5 +1,8 @@
 from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
+from xml.etree.ElementTree import Element
+
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
@@ -22,6 +25,11 @@ class ZoteroPreprintItemData(ZoteroBaseItemData):
 
     @override
     @classmethod
+    def bibliography_source_type(cls):
+        return "Report"
+
+    @override
+    @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroPreprintItemData":
         _base_item_data = ZoteroBaseItemData.map_from_data(_data)
         return cls(
@@ -33,6 +41,16 @@ class ZoteroPreprintItemData(ZoteroBaseItemData):
             place=map_to_str(_data.get("place")),
             series=map_to_str(_data.get("series")),
             series_number=map_to_str(_data.get("seriesNumber")),
-            doi=map_to_str(_data.get("doi")),
+            doi=map_to_str(_data.get("DOI")),
             citation_key=map_to_str(_data.get("citationKey")),
         )
+
+    @override
+    def map_to_bibxml(self, _source_element: Element):
+        ZoteroBaseItemData.map_to_bibxml(self, _source_element)
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.genre)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Institution", self.repository)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Number", self.archive_id)
+        add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
+        add_bibliography_namespaced_element_if_missing(_source_element, "DOI", self.doi)

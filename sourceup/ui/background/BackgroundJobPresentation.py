@@ -1,0 +1,6 @@
+from typing import Protocol
+from PySide6.QtWidgets import QWidget
+
+class BackgroundJobPresentation(Protocol):
+    def on_start(self, _parent: QWidget) -> None: ...
+    def on_finish(self) -> None: ...

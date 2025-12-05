@@ -7,14 +7,15 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.12,<3.14"
+requests = "^2.32.5"
 pyside6 = "^6.9.2"
 pyinstaller = "^6.16.0"
 pyzotero = "^1.6.16"
-lxml = "^6.0.2"
+dateparser = "^1.2.2"
 
 [tool.poetry.scripts]
 sourceup = "sourceup.app:main"
-sourceup-build = "sourceup-build:main"
+sourceup-package = "sourceup-package:main"
 
 [build-system]
 requires = ["poetry-core"]

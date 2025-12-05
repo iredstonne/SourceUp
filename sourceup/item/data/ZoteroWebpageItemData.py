@@ -1,6 +1,8 @@
 from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
 from xml.etree.ElementTree import Element
+
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
@@ -34,4 +36,5 @@ class ZoteroWebpageItemData(ZoteroBaseItemData):
     @override
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
-        pass
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "InternetSiteTitle", self.webpage_title)

@@ -28,7 +28,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install poetry
-      - name: Install dependencies (with dev) using Poetry
+      - name: Install dependencies using Poetry
         run: |
           poetry install
       - name: Package Python code to executable with PyInstaller

@@ -21,7 +21,6 @@ def main():
         '--onefile',
         '--noconsole',
         '-n', "SourceUp",
-        '-s',
         f"--add-data={str(_app_module_assets_path)}{os.pathsep}assets",
         f"--icon={str(_build_icon_path)}",
         '--distpath', str(_dist_path),

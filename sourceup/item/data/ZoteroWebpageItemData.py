@@ -38,3 +38,4 @@ class ZoteroWebpageItemData(ZoteroBaseItemData):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
         add_bibliography_namespaced_element_if_missing(_source_element, "InternetSiteTitle", self.webpage_title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.website_type)

@@ -30,7 +30,7 @@ jobs:
           pip install poetry
       - name: Install dependencies (with dev) using Poetry
         run: |
-          poetry install --with dev
+          poetry install
       - name: Build executable with PyInstaller
         run: |
           poetry run sourceup-build

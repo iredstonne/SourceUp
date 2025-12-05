@@ -39,5 +39,7 @@ class ZoteroManuscriptItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
+        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.manuscript_type)
         add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
         add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.num_pages)
+

@@ -49,6 +49,7 @@ class ZoteroDictionaryEntryItemData(ZoteroBaseItemData):
             pages=map_to_str(_data.get("pages")),
             isbn=map_to_str(_data.get("ISBN"))
         )
+
     @override
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)

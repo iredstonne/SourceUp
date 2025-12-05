@@ -29,6 +29,6 @@ class ZoteroStandardItemData(ZoteroBaseItemData):
             committee=map_to_str(_data.get("committee")),
             type=map_to_str(_data.get("type")),
             number=map_to_str(_data.get("number")),
-            version_number=map_to_str(_data.get("version_number")),
+            version_number=map_to_str(_data.get("versionNumber")),
             status=map_to_str(_data.get("status"))
         )

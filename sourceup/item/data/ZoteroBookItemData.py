@@ -43,7 +43,7 @@ class ZoteroBookItemData(ZoteroBaseItemData):
             place=map_to_str(_data.get("place")),
             publisher=map_to_str(_data.get("publisher")),
             num_pages=map_to_str(_data.get("numPages")),
-            isbn=map_to_str(_data.get("isbn"))
+            isbn=map_to_str(_data.get("ISBN"))
         )
 
     @override
@@ -60,3 +60,4 @@ class ZoteroBookItemData(ZoteroBaseItemData):
             _pages=self.num_pages,
             _standard_number=self.isbn
         )
+

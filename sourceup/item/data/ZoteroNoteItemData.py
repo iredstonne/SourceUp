@@ -14,6 +14,11 @@ class ZoteroNoteItemData(ZoteroBaseItemData):
 
     @override
     @classmethod
+    def bibliography_source_type(cls):
+        return "Misc"
+
+    @override
+    @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroNoteItemData":
         _base_item_data = ZoteroBaseItemData.map_from_data(_data)
         return cls(

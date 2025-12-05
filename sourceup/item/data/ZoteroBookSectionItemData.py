@@ -1,7 +1,7 @@
 from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
 from xml.etree.ElementTree import Element
-from sourceup.exporter.wordbibxml_functions import add_common_book_bibliography_namespaced_element, \
+from sourceup.exporter.wordbibxml_functions import add_common_book_bibliography_namespaced_elements, \
     add_bibliography_namespaced_element_if_missing
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.item.ZoteroItemType import ZoteroItemType
@@ -59,7 +59,7 @@ class ZoteroBookSectionItemData(ZoteroBaseItemData):
             self.book_title
         )
 
-        add_common_book_bibliography_namespaced_element(
+        add_common_book_bibliography_namespaced_elements(
             _source_element,
             _volume=self.volume,
             _number_volumes=self.number_of_volumes,

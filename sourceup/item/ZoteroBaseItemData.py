@@ -27,11 +27,12 @@ class ZoteroBaseItemData:
     extra: Optional[str] = None
 
     @property
-    def datetime(self) -> Optional[datetime]:
-        _datetime = parse(self.date)
-        if not _datetime:
-            raise ValueError("Could not parse date. Please use a standard format like YYYY-MM-DD")
-        return _datetime
+    def date_to_datetime(self) -> Optional[datetime]:
+        return parse(self.date)
+
+    @property
+    def access_date_to_datetime(self) -> Optional[datetime]:
+        return parse(self.access_date)
 
     @classmethod
     def item_type(cls) -> ZoteroItemType:
@@ -39,7 +40,7 @@ class ZoteroBaseItemData:
 
     @classmethod
     def bibliography_source_type(cls):
-        raise NotImplementedError("No bibliography source type specified")
+        return "Misc"
 
     @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroBaseItemData":
@@ -87,43 +88,25 @@ class ZoteroBaseItemData:
             _abstract_element.text = str(self.abstract_note)
             _source_element.append(_abstract_element)
 
-        if self.date:
-            _year = self.datetime.year
+        if self.date_to_datetime:
+            _year = self.date_to_datetime.year
             if _year:
                 # <b:Year>
                 _year_element = create_bibliography_namespaced_element("Year")
                 _year_element.text = str(_year)
                 _source_element.append(_year_element)
-            _month = self.datetime.month
+            _month = self.date_to_datetime.month
             if _month:
                 # <b:Month>
                 _month_element = create_bibliography_namespaced_element("Month")
                 _month_element.text = str(_month)
                 _source_element.append(_month_element)
-            _day = self.datetime.day
+            _day = self.date_to_datetime.day
             if _day:
                 # <b:Day>
                 _day_element = create_bibliography_namespaced_element("Day")
                 _day_element.text = str(_day)
                 _source_element.append(_day_element)
-            _hour = self.datetime.hour
-            if _hour:
-                # <b:Hour>
-                _hour_element = create_bibliography_namespaced_element("Hour")
-                _hour_element.text = str(_hour)
-                _source_element.append(_hour_element)
-            _minute = self.datetime.minute
-            if _minute:
-                # <b:Minute>
-                _minute_element = create_bibliography_namespaced_element("Minute")
-                _minute_element.text = str(_minute)
-                _source_element.append(_minute_element)
-            _second = self.datetime.second
-            if _second:
-                # <b:Second>
-                _second_element = create_bibliography_namespaced_element("Second")
-                _second_element.text = str(_second)
-                _source_element.append(_second_element)
 
         if self.language:
             # <b:Language>
@@ -143,11 +126,25 @@ class ZoteroBaseItemData:
             _url_element.text = str(self.url)
             _source_element.append(_url_element)
 
-        if self.access_date:
-            # <b:Accessed>
-            _accessed_element = create_bibliography_namespaced_element("Accessed")
-            _accessed_element.text = str(self.access_date)
-            _source_element.append(_accessed_element)
+        if self.access_date_to_datetime:
+            _year_accessed = self.access_date_to_datetime.year
+            if _year_accessed:
+                # <b:YearAccessed>
+                _year_accessed_element = create_bibliography_namespaced_element("YearAccessed")
+                _year_accessed_element.text = str(_year_accessed)
+                _source_element.append(_year_accessed_element)
+            _month_accessed = self.access_date_to_datetime.month
+            if _month_accessed:
+                # <b:MonthAccessed>
+                _month_accessed_element = create_bibliography_namespaced_element("MonthAccessed")
+                _month_accessed_element.text = str(_month_accessed)
+                _source_element.append(_month_accessed_element)
+            _day_accessed = self.access_date_to_datetime.day
+            if _day_accessed:
+                # <b:DayAccessed>
+                _day_accessed_element = create_bibliography_namespaced_element("DayAccessed")
+                _day_accessed_element.text = str(_day_accessed)
+                _source_element.append(_day_accessed_element)
 
         if self.archive:
             # <b:Archive>

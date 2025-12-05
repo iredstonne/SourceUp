@@ -30,7 +30,7 @@ class ZoteroThesisItemData(ZoteroBaseItemData):
         return cls(
             **{_base_item_data_field.name: getattr(_base_item_data, _base_item_data_field.name)
                for _base_item_data_field in fields(ZoteroBaseItemData)},
-            thesis_type=map_to_str(_data.get("manuscriptType")),
+            thesis_type=map_to_str(_data.get("thesisType")),
             university=map_to_str(_data.get("university")),
             place=map_to_str(_data.get("place")),
             num_pages=map_to_str(_data.get("numPages"))
@@ -44,4 +44,5 @@ class ZoteroThesisItemData(ZoteroBaseItemData):
         add_bibliography_namespaced_element_if_missing(_source_element, "Institution", self.university)
         add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
         add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.num_pages)
+
 

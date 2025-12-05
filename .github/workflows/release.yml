@@ -31,9 +31,9 @@ jobs:
       - name: Install dependencies (with dev) using Poetry
         run: |
           poetry install
-      - name: Build executable with PyInstaller
+      - name: Package Python code to executable with PyInstaller
         run: |
-          poetry run sourceup-build
+          poetry run sourceup-package
       - name: Ensure executable was built
         run: |
           if (!(Test-Path "dist\SourceUp.exe")) {

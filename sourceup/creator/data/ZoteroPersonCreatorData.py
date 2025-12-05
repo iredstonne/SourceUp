@@ -27,7 +27,6 @@ class ZoteroPersonCreatorData(ZoteroBaseCreatorData):
         return cls(_first_name, _last_name)
 
     def map_to_bibxml(self, _author_element: Element):
-        _name_list_element = create_bibliography_namespaced_element("NameList")
         _person_element = create_bibliography_namespaced_element("Person")
         if self.first_name:
             _first_element = create_bibliography_namespaced_element("First")
@@ -37,5 +36,4 @@ class ZoteroPersonCreatorData(ZoteroBaseCreatorData):
             _last_element = create_bibliography_namespaced_element("Last")
             _last_element.text = str(self.last_name)
             _person_element.append(_last_element)
-        _name_list_element.append(_person_element)
-        _author_element.append(_name_list_element)
+        _author_element.append(_person_element)

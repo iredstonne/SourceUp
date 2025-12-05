@@ -73,14 +73,95 @@ class ZoteroBaseItemData:
             _source_element.append(_title_element)
 
         if self.creators:
-            # <b:Authors>
-            _author_list_element = create_bibliography_namespaced_element("Author")
-            for _creator in self.creators:
-                # <b:Author>
-                _author_element = create_bibliography_namespaced_element("Author")
-                _creator.creator_data.map_to_bibxml(_author_element)
-                _author_list_element.append(_author_element)
-            _source_element.append(_author_list_element)
+            from sourceup.creator.ZoteroCreatorType import ZoteroCreatorType
+            from sourceup.creator.data.ZoteroPersonCreatorData import ZoteroPersonCreatorData
+            from sourceup.creator.data.ZoteroCorporateCreatorData import ZoteroCorporateCreatorData
+
+            _author_composite_element = create_bibliography_namespaced_element("Author")
+
+            # Role: Author
+            _author_creators = [
+                _creator for _creator in self.creators
+                if _creator.creator_type == ZoteroCreatorType.AUTHOR
+            ]
+
+            if _author_creators:
+                _corporate_author_creators = [
+                    _author_creator for _author_creator in _author_creators
+                    if isinstance(_author_creator.creator_data, ZoteroCorporateCreatorData)
+                ]
+                _person_author_creators = [
+                    _author_creator for _author_creator in _author_creators
+                    if isinstance(_author_creator.creator_data, ZoteroPersonCreatorData)
+                ]
+
+                _author_role_element = create_bibliography_namespaced_element("Author")
+
+                if _corporate_author_creators:
+                    _corporate_author_creators[0].creator_data.map_to_bibxml(_author_role_element)
+                elif _person_author_creators:
+                    _name_list_element = create_bibliography_namespaced_element("NameList")
+
+                    for _creator in _person_author_creators:
+                        _creator.creator_data.map_to_bibxml(_name_list_element)
+
+                    _author_role_element.append(_name_list_element)
+
+                if list(_author_role_element):
+                    _author_composite_element.append(_author_role_element)
+
+            # Role: Editor
+            _editor_creators = [
+                _creator for _creator in self.creators
+                if _creator.creator_type == ZoteroCreatorType.EDITOR
+            ]
+
+            if _editor_creators:
+                _person_editor_creators = [
+                    _editor_creator for _editor_creator in _editor_creators
+                    if isinstance(_editor_creator.creator_data, ZoteroPersonCreatorData)
+                ]
+
+                _editor_role_element = create_bibliography_namespaced_element("Editor")
+
+                if _person_editor_creators:
+                    _name_list_element = create_bibliography_namespaced_element("NameList")
+
+                    for _creator in _person_editor_creators:
+                        _creator.creator_data.map_to_bibxml(_name_list_element)
+
+                    _editor_role_element.append(_name_list_element)
+
+                if list(_editor_role_element):
+                    _author_composite_element.append(_editor_role_element)
+
+            # Role: Producer
+            _producer_creators = [
+                _creator for _creator in self.creators
+                if _creator.creator_type == ZoteroCreatorType.PRODUCER
+            ]
+
+            if _producer_creators:
+                _person_producer_creators = [
+                    _producer_creator for _producer_creator in _producer_creators
+                    if isinstance(_producer_creator.creator_data, ZoteroPersonCreatorData)
+                ]
+
+                _producer_role_element = create_bibliography_namespaced_element("Producer")
+
+                if _person_producer_creators:
+                    _name_list_element = create_bibliography_namespaced_element("NameList")
+
+                    for _creator in _person_producer_creators:
+                        _creator.creator_data.map_to_bibxml(_name_list_element)
+
+                    _producer_role_element.append(_name_list_element)
+
+                if list(_producer_role_element):
+                    _author_composite_element.append(_producer_role_element)
+
+            if list(_author_composite_element):
+                _source_element.append(_author_composite_element)
 
         if self.abstract_note:
             # <b:Abstract>

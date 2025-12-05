@@ -1,5 +1,9 @@
 from dataclasses import dataclass, fields
 from typing import override, Dict, Any, Optional
+from xml.etree.ElementTree import Element
+
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing, \
+    add_common_book_bibliography_namespaced_elements
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
@@ -24,6 +28,11 @@ class ZoteroDictionaryEntryItemData(ZoteroBaseItemData):
 
     @override
     @classmethod
+    def bibliography_source_type(cls):
+        return "BookSection"
+
+    @override
+    @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroDictionaryEntryItemData":
         _base_item_data = ZoteroBaseItemData.map_from_data(_data)
         return cls(
@@ -38,5 +47,21 @@ class ZoteroDictionaryEntryItemData(ZoteroBaseItemData):
             place=map_to_str(_data.get("place")),
             publisher=map_to_str(_data.get("publisher")),
             pages=map_to_str(_data.get("pages")),
-            isbn=map_to_str(_data.get("isbn"))
+            isbn=map_to_str(_data.get("ISBN"))
         )
+    @override
+    def map_to_bibxml(self, _source_element: Element):
+        ZoteroBaseItemData.map_to_bibxml(self, _source_element)
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "BookTitle", self.dictionary_title)
+        add_common_book_bibliography_namespaced_elements(
+            _source_element,
+            _volume=self.volume,
+            _number_volumes=self.number_of_volumes,
+            _edition=self.edition,
+            _city=self.place,
+            _publisher=self.publisher,
+            _pages=self.pages,
+            _standard_number=self.isbn
+        )
+

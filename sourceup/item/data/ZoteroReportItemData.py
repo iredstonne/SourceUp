@@ -2,8 +2,7 @@ from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
 from xml.etree.ElementTree import Element
 
-from sourceup.exporter.wordbibxml_functions import create_bibliography_namespaced_element, \
-    add_bibliography_namespaced_element_if_missing
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
@@ -51,3 +50,4 @@ class ZoteroReportItemData(ZoteroBaseItemData):
         add_bibliography_namespaced_element_if_missing(_source_element, "Institution", self.institution)
         add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
         add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.num_pages)
+

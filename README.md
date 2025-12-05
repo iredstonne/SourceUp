@@ -6,8 +6,6 @@
 
 If you don’t want to build from source, you’ll be able to download a prebuilt package for **Windows** from the [Releases page](https://github.com/iredstonne/SourceUp/releases).
 
-> Prebuilt binaries are not published yet. Until then, use the “Build From Source” option below.
-
 ### Option 2: Build From Source
 
 This is the recommended way to run SourceUp on **non-Windows platforms** (and it also works on Windows, of course).

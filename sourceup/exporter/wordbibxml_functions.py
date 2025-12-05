@@ -22,7 +22,7 @@ def add_bibliography_namespaced_element_if_missing(_source_element: Element, _ta
             _element.text = str(_tag_value)
             _source_element.append(_element)
 
-def add_common_book_bibliography_namespaced_element(
+def add_common_book_bibliography_namespaced_elements(
     _source_element: Element,
     _volume,
     _number_volumes,

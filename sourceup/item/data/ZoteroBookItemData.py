@@ -1,7 +1,7 @@
 from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
 from xml.etree.ElementTree import Element
-from sourceup.exporter.wordbibxml_functions import add_common_book_bibliography_namespaced_element
+from sourceup.exporter.wordbibxml_functions import add_common_book_bibliography_namespaced_elements
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.casts import map_to_str
@@ -50,7 +50,7 @@ class ZoteroBookItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_common_book_bibliography_namespaced_element(
+        add_common_book_bibliography_namespaced_elements(
             _source_element,
             _volume=self.volume,
             _number_volumes=self.number_of_volumes,

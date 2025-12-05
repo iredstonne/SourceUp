@@ -1,5 +1,8 @@
 from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
+from xml.etree.ElementTree import Element
+
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
@@ -20,15 +23,32 @@ class ZoteroNewspaperArticleItemData(ZoteroBaseItemData):
 
     @override
     @classmethod
+    def bibliography_source_type(cls):
+        return "ArticleInAPeriodical"
+
+    @override
+    @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroNewspaperArticleItemData":
         _base_item_data = ZoteroBaseItemData.map_from_data(_data)
         return cls(
             **{_base_item_data_field.name: getattr(_base_item_data, _base_item_data_field.name)
                for _base_item_data_field in fields(ZoteroBaseItemData)},
-            publication_title=map_to_str(_data.get("publication_title")),
+            publication_title=map_to_str(_data.get("publicationTitle")),
             place=map_to_str(_data.get("place")),
             edition=map_to_str(_data.get("edition")),
             section=map_to_str(_data.get("section")),
             pages=map_to_str(_data.get("pages")),
-            issn=map_to_str(_data.get("issn")),
+            issn=map_to_str(_data.get("ISSN")),
         )
+
+    @override
+    def map_to_bibxml(self, _source_element: Element):
+        ZoteroBaseItemData.map_to_bibxml(self, _source_element)
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "PeriodicalTitle", self.publication_title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Edition", self.edition)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.pages)
+        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.issn)
+
+

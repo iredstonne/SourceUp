@@ -39,6 +39,9 @@ jobs:
           if (!(Test-Path "dist\SourceUp.exe")) {
             Write-Error "SourceUp.exe not found in dist/"
           }
+      - name: Test executable on runner
+        run: |
+          .\dist\SourceUp.exe || echo "Exit code: $LASTEXITCODE"
       - name: Prepare executable for Github Release
         run: |
           Move-Item "dist\SourceUp.exe" "SourceUp-windows-x64.exe" -Force

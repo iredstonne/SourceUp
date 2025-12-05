@@ -15,6 +15,11 @@ class ZoteroEmailItemData(ZoteroBaseItemData):
 
     @override
     @classmethod
+    def bibliography_source_type(cls):
+        return "ElectronicSource"
+
+    @override
+    @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroEmailItemData":
         _base_item_data = ZoteroBaseItemData.map_from_data(_data)
         return cls(

@@ -1,5 +1,8 @@
 from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
+from xml.etree.ElementTree import Element
+
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
@@ -27,3 +30,22 @@ class ZoteroEmailItemData(ZoteroBaseItemData):
                for _base_item_data_field in fields(ZoteroBaseItemData)},
             subject=map_to_str(_data.get("subject"))
         )
+
+    @override
+    def map_to_bibxml(self, _source_element: Element):
+        ZoteroBaseItemData.map_to_bibxml(self, _source_element)
+
+        # SourceType -> ElectronicSource
+        # PublicationTitle: Mapped (subject)
+        # City: Not mapped
+        # StateProvince: Not mapped
+        # CountryRegion: Not mapped
+        # ProductionCompany: Not mapped
+        # Publisher: Not mapped
+        # Edition: Not mapped
+        # Medium: Not mapped
+        # Volume: Not mapped
+        # StandardNumber: Not mapped
+        # DOI: Not mapped
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "PublicationTitle", self.subject)

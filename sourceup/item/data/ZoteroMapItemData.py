@@ -1,5 +1,8 @@
 from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
+from xml.etree.ElementTree import Element
+
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
@@ -34,3 +37,29 @@ class ZoteroMapItemData(ZoteroBaseItemData):
             publisher=map_to_str(_data.get("publisher")),
             isbn=map_to_str(_data.get("isbn")),
         )
+
+    @override
+    def map_to_bibxml(self, _source_element: Element):
+        ZoteroBaseItemData.map_to_bibxml(self, _source_element)
+
+        # SourceType -> Misc
+        # PublicationTitle: Mapped (series_title)
+        # MediaType: Mapped "Map"
+        # City: Mapped (place)
+        # StateProvince: Not mapped
+        # CountryRegion: Not mapped
+        # Publisher: Mapped (publisher)
+        # Pages: Not mapped
+        # Volume: Not mapped
+        # Edition: Mapped (edition)
+        # Number: Not mapped
+        # StandardNumber: Mapped (isbn)
+        # Medium: Mapped (map_type)
+        # DOI: Not mapped
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "PublicationTitle", self.series_title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", self.publisher)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Edition", self.edition)
+        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.isbn)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.map_type)

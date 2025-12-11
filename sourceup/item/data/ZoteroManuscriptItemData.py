@@ -39,7 +39,17 @@ class ZoteroManuscriptItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.manuscript_type)
+        # SourceType -> Report
+        # Department: Not mapped
+        # Institution: Not mapped
+        # Publisher: Not mapped
+        # City: Mapped (place)
+        # Pages: Mapped (num_pages)
+        # ThesisType: Mapped (manuscript_type)
+        # StandardNumber: Not mapped
+        # Medium: Not mapped
+        # DOI: Not mapped
+
         add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
         add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.num_pages)
-
+        add_bibliography_namespaced_element_if_missing(_source_element, "ThesisType", self.manuscript_type)

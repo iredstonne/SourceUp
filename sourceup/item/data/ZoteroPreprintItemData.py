@@ -49,8 +49,20 @@ class ZoteroPreprintItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.genre)
+        # SourceType -> Report
+        # Department: Not mapped
+        # Institution: Mapped (repository)
+        # Publisher: Mapped (repository)
+        # City: Mapped (place)
+        # Pages: Not mapped
+        # ThesisType: Mapped (genre)
+        # StandardNumber: Mapped (archive_id)
+        # Medium: Not mapped
+        # DOI: Mapped (doi)
+
         add_bibliography_namespaced_element_if_missing(_source_element, "Institution", self.repository)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Number", self.archive_id)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", self.repository)
         add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
+        add_bibliography_namespaced_element_if_missing(_source_element, "ThesisType", self.genre)
+        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.archive_id)
         add_bibliography_namespaced_element_if_missing(_source_element, "DOI", self.doi)

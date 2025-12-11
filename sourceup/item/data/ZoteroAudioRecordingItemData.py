@@ -3,12 +3,19 @@ from typing import Optional, override, Dict, Any
 from xml.etree.ElementTree import Element
 
 from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
+from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.item.ZoteroItemType import ZoteroItemType
-from sourceup.item.data.ZoteroRecordingItemData import ZoteroRecordingItemData
 from sourceup.casts import map_to_str
 
 @dataclass(frozen=True, slots=True)
-class ZoteroAudioRecordingItemData(ZoteroRecordingItemData):
+class ZoteroAudioRecordingItemData(ZoteroBaseItemData):
+    series_title: Optional[str] = None
+    volume: Optional[str] = None
+    number_of_volumes: Optional[str] = None
+    place: Optional[str] = None
+    running_time: Optional[str] = None
+    isbn: Optional[str] = None
+    label: Optional[str] = None
     audio_recording_format: Optional[str] = None
 
     @override
@@ -24,15 +31,38 @@ class ZoteroAudioRecordingItemData(ZoteroRecordingItemData):
     @override
     @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroAudioRecordingItemData":
-        _recording_item_data = ZoteroRecordingItemData.map_from_data(_data)
+        _base_item_data = ZoteroBaseItemData.map_from_data(_data)
         return cls(
-            **{_recording_item_data_field.name: getattr(_recording_item_data, _recording_item_data_field.name)
-               for _recording_item_data_field in fields(ZoteroRecordingItemData)},
+            **{_base_item_data_field.name: getattr(_base_item_data, _base_item_data_field.name)
+               for _base_item_data_field in fields(ZoteroBaseItemData)},
+            series_title=map_to_str(_data.get("seriesTitle")),
+            volume=map_to_str(_data.get("volume")),
+            number_of_volumes=map_to_str(_data.get("numberOfVolumes")),
+            place=map_to_str(_data.get("place")),
+            running_time=map_to_str(_data.get("runningTime")),
+            isbn=map_to_str(_data.get("ISBN")),
+            label=map_to_str(_data.get("label")),
             audio_recording_format=map_to_str(_data.get("audioRecordingFormat"))
         )
 
     @override
     def map_to_bibxml(self, _source_element: Element):
-        ZoteroRecordingItemData.map_to_bibxml(self, _source_element)
+        ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
+        # SourceType -> SoundRecording
+        # AlbumTitle: Mapped (series_title)
+        # ProductionCompany: Mapped (label)
+        # Medium: Mapped (audio_recording_format)
+        # City: Mapped (place)
+        # StateProvince: Not mapped
+        # CountryRegion: Not mapped
+        # RecordingNumber: Mapped (call_number)
+        # StandardNumber: Mapped (isbn)
+        # DOI: Not mapped
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "AlbumTitle", self.series_title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "ProductionCompany", self.label)
         add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.audio_recording_format)
+        add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
+        add_bibliography_namespaced_element_if_missing(_source_element, "RecordingNumber", self.call_number)
+        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.isbn)

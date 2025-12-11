@@ -53,11 +53,21 @@ class ZoteroJournalArticleItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "JournalName", self.publication_title)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Volume", self.volume)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Issue", self.issue)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.pages)
-        add_bibliography_namespaced_element_if_missing(_source_element, "DOI", self.doi)
-        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.issn)
+        # SourceType -> JournalArticle
+        # JournalName: Mapped (publication_title)
+        # City: Not mapped
+        # Pages: Mapped (pages)
+        # Publisher: Not mapped
+        # Volume: Mapped (volume)
+        # Number: Mapped (issue)
+        # StandardNumber: Mapped (issn)
+        # Medium: Not mapped
+        # DOI: Not mapped
 
+        add_bibliography_namespaced_element_if_missing(_source_element, "JournalName", self.publication_title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.pages)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Volume", self.volume)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Number", self.issue)
+        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.issn)
+        add_bibliography_namespaced_element_if_missing(_source_element, "DOI", self.doi)
 

@@ -14,7 +14,7 @@ class ZoteroReportItemData(ZoteroBaseItemData):
     series_title: Optional[str] = None
     institution: Optional[str] = None
     place: Optional[str] = None
-    num_pages: Optional[str] = None
+    pages: Optional[str] = None
 
     @override
     @classmethod
@@ -36,18 +36,29 @@ class ZoteroReportItemData(ZoteroBaseItemData):
             report_number=map_to_str(_data.get("reportNumber")),
             report_type=map_to_str(_data.get("reportType")),
             series_title=map_to_str(_data.get("seriesTitle")),
-            institution=map_to_str(_data.get("institution")),
             place=map_to_str(_data.get("place")),
-            num_pages=map_to_str(_data.get("numPages"))
+            institution=map_to_str(_data.get("institution")),
+            pages=map_to_str(_data.get("pages"))
         )
 
     @override
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.report_type)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Number", self.report_number)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Institution", self.institution)
-        add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.num_pages)
+        # SourceType -> Report
+        # Department: Not mapped
+        # Institution: Mapped (institution)
+        # Publisher: Mapped (institution)
+        # City: Mapped (place)
+        # Pages: Mapped (pages)
+        # ThesisType: Mapped (report_type)
+        # StandardNumber: Mapped (report_number)
+        # Medium: Not mapped
+        # DOI: Not mapped
 
+        add_bibliography_namespaced_element_if_missing(_source_element, "Institution", self.institution)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", self.institution)
+        add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.pages)
+        add_bibliography_namespaced_element_if_missing(_source_element, "ThesisType", self.report_type)
+        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.report_number)

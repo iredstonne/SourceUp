@@ -2,8 +2,7 @@ from dataclasses import dataclass, fields
 from typing import override, Dict, Any, Optional
 from xml.etree.ElementTree import Element
 
-from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing, \
-    add_common_book_bibliography_namespaced_elements
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
@@ -54,15 +53,26 @@ class ZoteroDictionaryEntryItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "BookTitle", self.dictionary_title)
-        add_common_book_bibliography_namespaced_elements(
-            _source_element,
-            _volume=self.volume,
-            _number_volumes=self.number_of_volumes,
-            _edition=self.edition,
-            _city=self.place,
-            _publisher=self.publisher,
-            _pages=self.pages,
-            _standard_number=self.isbn
-        )
+        # SourceType -> BookSection
+        # BookTitle: Mapped (book_title)
+        # Pages: Mapped (pages)
+        # City: Mapped (place)
+        # StateProvince: Not mapped
+        # CountryRegion: Not mapped
+        # Publisher: Mapped (publisher)
+        # Volume: Mapped (volume)
+        # NumberVolumes: Mapped (number_of_volumes)
+        # ChapterNumber: Not mapped
+        # StandardNumber: Mapped (isbn)
+        # Edition: Mapped (edition)
+        # Medium: Not mapped
+        # DOI: Not mapped
 
+        add_bibliography_namespaced_element_if_missing(_source_element, "BookTitle", self.dictionary_title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.pages)
+        add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", self.publisher)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Volume", self.volume)
+        add_bibliography_namespaced_element_if_missing(_source_element, "NumberVolumes", self.number_of_volumes)
+        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.isbn)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Edition", self.edition)

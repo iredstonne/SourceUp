@@ -37,4 +37,17 @@ class ZoteroArtworkItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
+        # SourceType -> Art
+        # Institution: Mapped (archive)
+        # PublicationTitle: Mapped (title)
+        # City: Not mapped
+        # StateProvince: Not mapped
+        # CountryRegion: Not mapped
+        # Publisher: Not mapped
+        # Pages: Not mapped
+        # Medium: Mapped (artwork_medium)
+        # DOI: Not mapped
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "Institution", self.archive)
+        add_bibliography_namespaced_element_if_missing(_source_element, "PublicationTitle", self.title)
         add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.artwork_medium)

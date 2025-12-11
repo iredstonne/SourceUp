@@ -22,7 +22,7 @@ class ZoteroPodcastItemData(ZoteroBaseItemData):
     @override
     @classmethod
     def bibliography_source_type(cls):
-        return "SoundRecording"
+        return "Interview"
 
     @override
     @classmethod
@@ -41,7 +41,19 @@ class ZoteroPodcastItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
+        # SourceType -> Interview
+        # AlbumTitle: Mapped (series_title)
+        # Publisher: Not mapped
+        # Distributor: Not mapped
+        # Station: Not mapped
+        # City: Not mapped
+        # StateProvince: Not mapped
+        # CountryRegion: Not mapped
+        # Pages: Not mapped
+        # StandardNumber: Not mapped
+        # Medium: Mapped (audio_file_type)
+        # DOI: Not mapped
+
         add_bibliography_namespaced_element_if_missing(_source_element, "AlbumTitle", self.series_title)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Number", self.episode_number)
         add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.audio_file_type)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Duration", self.running_time)
+

@@ -47,10 +47,23 @@ class ZoteroComputerProgramItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "Version", self.version_number)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.system)
-        add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", self.company)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.programming_language)
-        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.isbn)
+        # SourceType -> ElectronicSource
+        # PublicationTitle: Mapped (series_title)
+        # City: Mapped (place)
+        # StateProvince: Not mapped
+        # CountryRegion: Not mapped
+        # ProductionCompany: Mapped (company)
+        # Publisher: Mapped (company)
+        # Edition: Mapped (version_number)
+        # Medium: Mapped (system)
+        # Volume: Not mapped
+        # StandardNumber: Mapped (isbn)
+        # DOI: Not mapped
 
+        add_bibliography_namespaced_element_if_missing(_source_element, "PublicationTitle", self.series_title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
+        add_bibliography_namespaced_element_if_missing(_source_element, "ProductionCompany", self.company)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", self.company)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Edition", self.version_number)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.system)
+        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.isbn)

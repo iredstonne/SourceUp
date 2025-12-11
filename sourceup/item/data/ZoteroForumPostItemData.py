@@ -10,7 +10,7 @@ from sourceup.casts import map_to_str
 @dataclass(frozen=True, slots=True)
 class ZoteroForumPostItemData(ZoteroBaseItemData):
     forum_title: Optional[str] = None
-    website_type: Optional[str] = None
+    post_type: Optional[str] = None
 
     @override
     @classmethod
@@ -30,13 +30,20 @@ class ZoteroForumPostItemData(ZoteroBaseItemData):
             **{_base_item_data_field.name: getattr(_base_item_data, _base_item_data_field.name)
                for _base_item_data_field in fields(ZoteroBaseItemData)},
             forum_title=map_to_str(_data.get("forumTitle")),
-            website_type=map_to_str(_data.get("websiteType"))
+            post_type=map_to_str(_data.get("postType"))
         )
 
     @override
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "InternetSiteTitle", self.forum_title)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.website_type)
+        # SourceType -> DocumentFromInternetSite
+        # InternetSiteName: Mapped (forum_title)
+        # ProductionCompany: Not mapped
+        # Version: Not mapped
+        # StandardNumber: Not mapped
+        # Medium: Mapped (post_type)
+        # DOI: Not mapped
 
+        add_bibliography_namespaced_element_if_missing(_source_element, "InternetSiteTitle", self.forum_title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.post_type)

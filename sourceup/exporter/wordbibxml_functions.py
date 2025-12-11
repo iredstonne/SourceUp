@@ -22,23 +22,6 @@ def add_bibliography_namespaced_element_if_missing(_source_element: Element, _ta
             _element.text = str(_tag_value)
             _source_element.append(_element)
 
-def add_common_book_bibliography_namespaced_elements(
-    _source_element: Element,
-    _volume,
-    _number_volumes,
-    _edition,
-    _city,
-    _publisher,
-    _pages,
-    _standard_number
-):
-    add_bibliography_namespaced_element_if_missing(_source_element, "Volume", _volume)
-    add_bibliography_namespaced_element_if_missing(_source_element, "NumberVolumes", _number_volumes)
-    add_bibliography_namespaced_element_if_missing(_source_element, "Edition", _edition)
-    add_bibliography_namespaced_element_if_missing(_source_element, "City", _city)
-    add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", _publisher)
-    add_bibliography_namespaced_element_if_missing(_source_element, "Pages", _pages)
-    add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", _standard_number)
 
 def export_as_bibxml_to_output_file(_items: Iterable[ZoteroItem], _output_file_save_path: str) -> str:
     # <b:Sources>

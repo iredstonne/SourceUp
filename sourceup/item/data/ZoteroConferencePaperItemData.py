@@ -50,11 +50,20 @@ class ZoteroConferencePaperItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "BookTitle", self.proceedings_title)
-        add_bibliography_namespaced_element_if_missing(_source_element, "ConferenceName", self.conference_name)
+        # SourceType -> ConferenceProceedings
+        # Pages: Mapped (pages)
+        # PublicationTitle: Mapped (proceedings_title)
+        # City: Mapped (place)
+        # Publisher: Mapped (publisher)
+        # Volume: Mapped (volume)
+        # StandardNumber: Mapped (isbn)
+        # Medium: Not mapped
+        # DOI: Mapped (doi)
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "PublicationTitle", self.proceedings_title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.pages)
         add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
         add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", self.publisher)
         add_bibliography_namespaced_element_if_missing(_source_element, "Volume", self.volume)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.pages)
-        add_bibliography_namespaced_element_if_missing(_source_element, "DOI", self.doi)
         add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.isbn)
+        add_bibliography_namespaced_element_if_missing(_source_element, "DOI", self.doi)

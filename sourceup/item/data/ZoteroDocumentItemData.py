@@ -35,4 +35,19 @@ class ZoteroDocumentItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
+        # SourceType -> ElectronicSource
+        # PublicationTitle: Mapped (title)
+        # City: Not mapped
+        # StateProvince: Not mapped
+        # CountryRegion: Not mapped
+        # ProductionCompany: Mapped (publisher)
+        # Publisher: Mapped (publisher)
+        # Edition: Not mapped
+        # Medium: Not mapped
+        # Volume: Not mapped
+        # StandardNumber: Not mapped
+        # DOI: Not mapped
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "PublicationTitle", self.title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "ProductionCompany", self.publisher)
         add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", self.publisher)

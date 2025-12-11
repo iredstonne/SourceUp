@@ -10,7 +10,7 @@ from sourceup.casts import map_to_str
 @dataclass(frozen=True, slots=True)
 class ZoteroBlogPostItemData(ZoteroBaseItemData):
     blog_title: Optional[str] = None
-    post_type: Optional[str] = None
+    website_type: Optional[str] = None
 
     @override
     @classmethod
@@ -30,12 +30,20 @@ class ZoteroBlogPostItemData(ZoteroBaseItemData):
             **{_base_item_data_field.name: getattr(_base_item_data, _base_item_data_field.name)
                for _base_item_data_field in fields(ZoteroBaseItemData)},
             blog_title=map_to_str(_data.get("blogTitle")),
-            post_type=map_to_str(_data.get("postType"))
+            website_type=map_to_str(_data.get("websiteType"))
         )
 
     @override
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
+        # SourceType -> DocumentFromInternetSite
+        # InternetSiteName: Mapped (blog_title)
+        # ProductionCompany: Not mapped
+        # Version: Not mapped
+        # StandardNumber: Not mapped
+        # Medium: Mapped (website_type)
+        # DOI: Not mapped
+
         add_bibliography_namespaced_element_if_missing(_source_element, "InternetSiteTitle", self.blog_title)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.post_type)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.website_type)

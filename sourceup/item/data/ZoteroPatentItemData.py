@@ -1,5 +1,8 @@
 from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
+from xml.etree.ElementTree import Element
+
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
@@ -49,3 +52,17 @@ class ZoteroPatentItemData(ZoteroBaseItemData):
             references=map_to_str(_data.get("references")),
             legal_status=map_to_str(_data.get("legalStatus"))
         )
+
+    @override
+    def map_to_bibxml(self, _source_element: Element):
+        ZoteroBaseItemData.map_to_bibxml(self, _source_element)
+
+        # SourceType -> Patent
+        # CountryRegion: Mapped (country)
+        # Type: Not mapped
+        # PatentNumber: Mapped (patent_number)
+        # Medium: Not mapped
+        # DOI: Not mapped
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "CountryRegion", self.country)
+        add_bibliography_namespaced_element_if_missing(_source_element, "PatentNumber", self.patent_number)

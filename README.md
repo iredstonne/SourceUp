@@ -13,7 +13,7 @@ If you manage your references in **Zotero** but write in **Microsoft Word**, you
 
 - Reading your Zotero library directly.
 - Generating a clean, Word-compatible **BibXML** file, using the best possible mapping from Zotero fields to Word’s format.
-- Letting you import it into Word’s native bibliography system in a few more clicks.
+- Letting you import it into Word’s native bibliography system in a few clicks.
 
 SourceUp is designed for **students, researchers, and academic writers** who want:
  

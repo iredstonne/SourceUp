@@ -11,7 +11,13 @@ On macOS and Linux, use **Option 2: Build From Source**.
 
 ### Option 2: Build From Source (Advanced)
 
-This is the recommended way to run SourceUp on **non-Windows platforms** (and it also works on Windows, of course).
+This option is intended for **developers** and for running SourceUp on **macOS** or **Linux**.  
+It also works well on **Windows** if you prefer a source-based, fully controllable setup (for example, when developing or testing new features).
+
+Building from source gives you:
+- Full control over the Python environment
+- The ability to track the latest changes from `main` or `dev`
+- Easier debugging and local development
 
 #### Requirements
 - [Python 3.12](https://www.python.org/downloads/release/python-3120) (tested)

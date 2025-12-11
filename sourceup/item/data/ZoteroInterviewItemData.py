@@ -35,4 +35,18 @@ class ZoteroInterviewItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
+        # SourceType -> Interview
+        # AlbumTitle: Mapped (title)
+        # Publisher: Not mapped
+        # Distributor: Not mapped
+        # Station: Not mapped
+        # City: Not mapped
+        # StateProvince: Not mapped
+        # CountryRegion: Not mapped
+        # Pages: Not mapped
+        # StandardNumber: Not mapped
+        # Medium: Mapped (interview_medium)
+        # DOI: Not mapped
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "AlbumTitle", self.title)
         add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.interview_medium)

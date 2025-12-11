@@ -37,7 +37,7 @@ class ZoteroDatasetItemData(ZoteroBaseItemData):
                for _base_item_data_field in fields(ZoteroBaseItemData)},
             identifier=map_to_str(_data.get("identifier")),
             type=map_to_str(_data.get("type")),
-            version_number=map_to_str(_data.get("version")),
+            version_number=map_to_str(_data.get("versionNumber")),
             repository=map_to_str(_data.get("repository")),
             repository_location=map_to_str(_data.get("repositoryLocation")),
             format=map_to_str(_data.get("format")),
@@ -49,10 +49,24 @@ class ZoteroDatasetItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.identifier)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.type)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Version", self.version_number)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Institution", self.repository)
-        add_bibliography_namespaced_element_if_missing(_source_element, "City", self.repository_location)
+        # SourceType -> ElectronicSource
+        # PublicationTitle: Mapped (title)
+        # City: Mapped (repository_location)
+        # StateProvince: Not mapped
+        # CountryRegion: Not mapped
+        # ProductionCompany: Mapped (repository)
+        # Publisher: Mapped (repository)
+        # Edition: Mapped (version_number)
+        # Medium: Mapped (format)
+        # Volume: Not mapped
+        # StandardNumber: Mapped (identifier)
+        # DOI: Mapped (doi)
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "PublicationTitle", self.title)
+        add_bibliography_namespaced_element_if_missing(_source_element,"City", self.repository_location)
+        add_bibliography_namespaced_element_if_missing(_source_element, "ProductionCompany", self.repository)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", self.repository)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Edition", self.version_number)
         add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.format)
+        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.identifier)
         add_bibliography_namespaced_element_if_missing(_source_element, "DOI", self.doi)

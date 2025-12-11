@@ -32,7 +32,6 @@ class ZoteroVideoRecordingItemData(ZoteroBaseItemData):
     @classmethod
     def map_from_data(cls, _data: Dict[str, Any]) -> "ZoteroVideoRecordingItemData":
         _base_item_data = ZoteroBaseItemData.map_from_data(_data)
-        print(_data)
         return cls(
             **{_base_item_data_field.name: getattr(_base_item_data, _base_item_data_field.name)
                for _base_item_data_field in fields(ZoteroBaseItemData)},

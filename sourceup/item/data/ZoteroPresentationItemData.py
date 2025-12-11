@@ -39,6 +39,22 @@ class ZoteroPresentationItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.presentation_type)
+        # SourceType -> Misc
+        # PublicationTitle: Mapped (meeting_name)
+        # MediaType: Mapped "Presentation"
+        # City: Mapped (city)
+        # StateProvince: Not mapped
+        # CountryRegion: Not mapped
+        # Publisher: Not mapped
+        # Pages: Not mapped
+        # Volume: Not mapped
+        # Edition: Not mapped
+        # Number: Not mapped
+        # StandardNumber: Not mapped
+        # Medium: Not mapped
+        # DOI: Not mapped
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "PublicationTitle", self.meeting_name)
         add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
-        add_bibliography_namespaced_element_if_missing(_source_element, "ConferenceName", self.meeting_name)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.presentation_type)
+

@@ -43,8 +43,20 @@ class ZoteroMagazineArticleItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
+        # SourceType -> ArticleInAPeriodical
+        # PeriodicalTitle: Mapped (publication_title)
+        # City: Not mapped
+        # Pages: Mapped (pages)
+        # Publisher: Not mapped
+        # Edition: Not mapped
+        # Volume: Mapped (volume)
+        # Number: Mapped (issue)
+        # StandardNumber: Mapped (issn)
+        # Medium: Not mapped
+        # DOI: Not mapped
+
         add_bibliography_namespaced_element_if_missing(_source_element, "PeriodicalTitle", self.publication_title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.pages)
         add_bibliography_namespaced_element_if_missing(_source_element, "Volume", self.volume)
         add_bibliography_namespaced_element_if_missing(_source_element, "Issue", self.issue)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.pages)
         add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.issn)

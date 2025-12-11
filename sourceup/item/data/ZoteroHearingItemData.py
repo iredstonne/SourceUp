@@ -51,12 +51,19 @@ class ZoteroHearingItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "Department", self.committee)
+        # SourceType -> Hearing
+        # CaseNumber: Mapped (document_number)
+        # Reporter: Mapped (committee)
+        # City: Mapped (place)
+        # Court: Mapped (legislative_body)
+        # AbbreviatedCaseNumber: Mapped (document_number)
+        # Medium: Not mapped
+        # DOI: Not mapped
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "CaseNumber", self.document_number)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Reporter", self.committee)
         add_bibliography_namespaced_element_if_missing(_source_element, "City", self.place)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", self.publisher)
-        add_bibliography_namespaced_element_if_missing(_source_element, "NumberVolumes", self.number_of_volumes)
-        add_bibliography_namespaced_element_if_missing(_source_element, "StandardNumber", self.document_number)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Pages", self.pages)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Institution", self.legislative_body)
-        add_bibliography_namespaced_element_if_missing(_source_element, "ConferenceName", self.session)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Court", self.legislative_body)
+        add_bibliography_namespaced_element_if_missing(_source_element, "AbbreviatedCaseNumber", self.document_number)
+
 

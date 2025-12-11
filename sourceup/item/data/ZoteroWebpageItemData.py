@@ -1,15 +1,14 @@
 from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
 from xml.etree.ElementTree import Element
-
-from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
-from sourceup.item.ZoteroItemType import ZoteroItemType
-from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
+from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
+from sourceup.item.ZoteroItemType import ZoteroItemType
 
 @dataclass(frozen=True, slots=True)
 class ZoteroWebpageItemData(ZoteroBaseItemData):
-    webpage_title: Optional[str] = None
+    website_title: Optional[str] = None
     website_type: Optional[str] = None
 
     @override
@@ -20,7 +19,7 @@ class ZoteroWebpageItemData(ZoteroBaseItemData):
     @override
     @classmethod
     def bibliography_source_type(cls):
-        return "DocumentFromInternetSite"
+        return "InternetSite"
 
     @override
     @classmethod
@@ -29,13 +28,21 @@ class ZoteroWebpageItemData(ZoteroBaseItemData):
         return cls(
             **{_base_item_data_field.name: getattr(_base_item_data, _base_item_data_field.name)
                for _base_item_data_field in fields(ZoteroBaseItemData)},
-            webpage_title=map_to_str(_data.get("webpageTitle")),
-            website_type=map_to_str(_data.get("webpageType"))
+            website_title=map_to_str(_data.get("websiteTitle")),
+            website_type=map_to_str(_data.get("websiteType"))
         )
 
     @override
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "InternetSiteTitle", self.webpage_title)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.website_type)
+        # SourceType -> InternetSite
+        # InternetSiteTitle: Mapped (website_title)
+        # ProductionCompany: Not mapped
+        # Version: Not mapped
+        # StandardNumber: Not mapped
+        # Medium: Mapped (website_type)
+        # DOI: Not mapped
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "InternetSiteTitle", self.website_title)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.website_type)

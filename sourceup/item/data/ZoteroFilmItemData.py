@@ -41,7 +41,14 @@ class ZoteroFilmItemData(ZoteroBaseItemData):
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 
-        add_bibliography_namespaced_element_if_missing(_source_element, "Publisher", self.distributor)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Type", self.genre)
+        # SourceType -> Film
+        # ProductionCompany: Mapped (distributor)
+        # CountryRegion: Not mapped
+        # Distributor: Mapped (distributor)
+        # Medium: Mapped (video_recording_format)
+        # StandardNumber: Not mapped
+        # DOI: Not mapped
+
+        add_bibliography_namespaced_element_if_missing(_source_element, "ProductionCompany", self.distributor)
+        add_bibliography_namespaced_element_if_missing(_source_element, "Distributor", self.distributor)
         add_bibliography_namespaced_element_if_missing(_source_element, "Medium", self.video_recording_format)
-        add_bibliography_namespaced_element_if_missing(_source_element, "Duration", self.running_time)

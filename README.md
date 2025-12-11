@@ -2,9 +2,12 @@
 **SourceUp** is a desktop app that bridges your **Zotero** library with **Microsoft Word** by exporting your references to a Word-friendly bibliography format (**BibXML**)
 
 ## 📦 Installation
-### Option 1: Prebuilt Packages (coming soon)
+### Option 1: Prebuilt Packages (Windows beta)
 
-If you don’t want to build from source, you’ll be able to download a prebuilt package for **Windows** from the [Releases page](https://github.com/iredstonne/SourceUp/releases).
+If you don’t want to build from source, you can download the latest **Windows** beta build from the [Releases page](https://github.com/iredstonne/SourceUp/releases).
+
+Prebuilt packages are currently **only available for Windows**. Support for **macOS** packages is planned for a future release.
+On macOS and Linux, use **Option 2: Build From Source**.
 
 ### Option 2: Build From Source
 
@@ -25,7 +28,7 @@ poetry run sourceup
 ```
 
 ## Contributing
-Contributions are welcome! 
+Contributions are welcome! **English is required** for issues, pull requests, and code comments so the project stays accessible to everyone.
 
 You can:
 

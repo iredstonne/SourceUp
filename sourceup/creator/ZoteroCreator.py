@@ -27,7 +27,7 @@ class ZoteroCreator:
 
     def __repr__(self):
         _display_name = self.creator_data.display_name().strip()
-        _role = self.creator_type.name.capitalize()
+        _role = self.creator_type.name.strip().replace("_", " ").title()
         return f"{_display_name} ({_role})"
 
     def __str__(self):

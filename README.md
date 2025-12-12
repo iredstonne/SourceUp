@@ -24,7 +24,11 @@ SourceUp is designed for **students, researchers, and academic writers** who wan
 ## 📦 Installation
 ### Option 1: Prebuilt Packages (Recommended)
 
-If you don’t want to build from source, you can download the latest **Windows** beta build from the [Releases page](https://github.com/iredstonne/SourceUp/releases).
+If you don’t want to build from source, you can download the latest beta build from the [Releases page](https://github.com/iredstonne/SourceUp/releases).
+
+This build is a portable executable, which means:
+- No admin rights required (should works on most managed work/school computers)
+- Run it from anywhere (any folder, including a USB or network drive)
 
 Prebuilt packages are currently **only available for Windows**. Support for **macOS** packages is planned for a future release.
 On macOS and Linux, use **Option 2: Build From Source**.

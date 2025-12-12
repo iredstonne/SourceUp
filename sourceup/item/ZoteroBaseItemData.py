@@ -5,7 +5,8 @@ from xml.etree.ElementTree import Element
 from dateparser import parse
 from sourceup.casts import map_to_str
 from sourceup.creator.ZoteroCreator import ZoteroCreator
-from sourceup.exporter.wordbibxml_functions import create_bibliography_namespaced_element
+from sourceup.exporter.wordbibxml_functions import create_bibliography_namespaced_element, \
+    add_bibliography_namespaced_role_element
 from sourceup.item.ZoteroItemType import ZoteroItemType
 
 
@@ -68,236 +69,86 @@ class ZoteroBaseItemData:
         # Year: Mapped (date -> year)
         # Month: Mapped (date -> month)
         # Day: Mapped (date -> day)
-        # Language: Mapped
-        # ShortTitle: Mapped
+        # Language: Mapped (language)
+        # ShortTitle: Mapped (short_title)
         # YearAccessed: Mapped (access_date -> year)
         # MonthAccessed: Mapped (access_date -> month)
         # DayAccessed: Mapped (access_date -> day)
-        # Comments: Mapped
-        # URL: Mapped
+        # Comments: Mapped (extra)
+        # URL: Mapped (url)
 
         _source_type_element = create_bibliography_namespaced_element("SourceType")
         _source_type_element.text = self.bibliography_source_type()
         _source_element.append(_source_type_element)
 
         if self.title:
-            # <b:Title>
             _title_element = create_bibliography_namespaced_element("Title")
             _title_element.text = str(self.title)
             _source_element.append(_title_element)
 
         if self.creators:
             from sourceup.creator.ZoteroCreatorType import ZoteroCreatorType
-            from sourceup.creator.data.ZoteroPersonCreatorData import ZoteroPersonCreatorData
-            from sourceup.creator.data.ZoteroCorporateCreatorData import ZoteroCorporateCreatorData
-
             _author_composite_element = create_bibliography_namespaced_element("Author")
 
-            # Role: Author
-            _author_creators = [
-                _creator for _creator in self.creators
-                if _creator.creator_type == ZoteroCreatorType.AUTHOR
-            ]
-
-            if _author_creators:
-                _corporate_author_creators = [
-                    _author_creator for _author_creator in _author_creators
-                    if isinstance(_author_creator.creator_data, ZoteroCorporateCreatorData)
-                ]
-                _person_author_creators = [
-                    _author_creator for _author_creator in _author_creators
-                    if isinstance(_author_creator.creator_data, ZoteroPersonCreatorData)
-                ]
-
-                _author_role_element = create_bibliography_namespaced_element("Author")
-
-                if _corporate_author_creators:
-                    _corporate_author_creators[0].creator_data.map_to_bibxml(_author_role_element)
-                elif _person_author_creators:
-                    _name_list_element = create_bibliography_namespaced_element("NameList")
-
-                    for _creator in _person_author_creators:
-                        _creator.creator_data.map_to_bibxml(_name_list_element)
-
-                    _author_role_element.append(_name_list_element)
-
-                if list(_author_role_element):
-                    _author_composite_element.append(_author_role_element)
-
-            # Role: Book Author
-            _book_author_creators = [
-                _creator for _creator in self.creators
-                if _creator.creator_type == ZoteroCreatorType.AUTHOR
-            ]
-
-            if _book_author_creators:
-                _person_book_author_creators = [
-                    _book_author_creator for _book_author_creator in _book_author_creators
-                    if isinstance(_book_author_creator.creator_data, ZoteroPersonCreatorData)
-                ]
-
-                _book_author_role_element = create_bibliography_namespaced_element("Bookauthor")
-
-                if _person_book_author_creators:
-                    _name_list_element = create_bibliography_namespaced_element("NameList")
-
-                    for _creator in _person_book_author_creators:
-                        _creator.creator_data.map_to_bibxml(_name_list_element)
-
-                    _book_author_role_element.append(_name_list_element)
-
-                if list(_book_author_role_element):
-                    _author_composite_element.append(_book_author_role_element)
-
-            # Role: Editor
-            _editor_creators = [
-                _creator for _creator in self.creators
-                if _creator.creator_type == ZoteroCreatorType.EDITOR
-            ]
-
-            if _editor_creators:
-                _person_editor_creators = [
-                    _editor_creator for _editor_creator in _editor_creators
-                    if isinstance(_editor_creator.creator_data, ZoteroPersonCreatorData)
-                ]
-
-                _editor_role_element = create_bibliography_namespaced_element("Editor")
-
-                if _person_editor_creators:
-                    _name_list_element = create_bibliography_namespaced_element("NameList")
-
-                    for _creator in _person_editor_creators:
-                        _creator.creator_data.map_to_bibxml(_name_list_element)
-
-                    _editor_role_element.append(_name_list_element)
-
-                if list(_editor_role_element):
-                    _author_composite_element.append(_editor_role_element)
-
-            # Role: Producer
-            _producer_creators = [
-                _creator for _creator in self.creators
-                if _creator.creator_type == ZoteroCreatorType.PRODUCER
-            ]
-
-            if _producer_creators:
-                _person_producer_creators = [
-                    _producer_creator for _producer_creator in _producer_creators
-                    if isinstance(_producer_creator.creator_data, ZoteroPersonCreatorData)
-                ]
-
-                _producer_role_element = create_bibliography_namespaced_element("Producer")
-
-                if _person_producer_creators:
-                    _name_list_element = create_bibliography_namespaced_element("NameList")
-
-                    for _creator in _person_producer_creators:
-                        _creator.creator_data.map_to_bibxml(_name_list_element)
-
-                    _producer_role_element.append(_name_list_element)
-
-                if list(_producer_role_element):
-                    _author_composite_element.append(_producer_role_element)
-
-            # Role: Artist
-            _artist_creators = [
-                _creator for _creator in self.creators
-                if _creator.creator_type == ZoteroCreatorType.ARTIST
-            ]
-
-            if _artist_creators:
-                _person_artist_creators = [
-                    _artist_creator for _artist_creator in _artist_creators
-                    if isinstance(_artist_creator.creator_data, ZoteroPersonCreatorData)
-                ]
-
-                _artist_role_element = create_bibliography_namespaced_element("Artist")
-
-                if _person_artist_creators:
-                    _name_list_element = create_bibliography_namespaced_element("NameList")
-
-                    for _creator in _person_artist_creators:
-                        _creator.creator_data.map_to_bibxml(_name_list_element)
-
-                    _artist_role_element.append(_name_list_element)
-
-                if list(_artist_role_element):
-                    _author_composite_element.append(_artist_role_element)
-
-            # Role: Director
-            _director_creators = [
-                _creator for _creator in self.creators
-                if _creator.creator_type == ZoteroCreatorType.DIRECTOR
-            ]
-
-            if _director_creators:
-                _person_director_creators = [
-                    _performer_creator for _performer_creator in _director_creators
-                    if isinstance(_performer_creator.creator_data, ZoteroPersonCreatorData)
-                ]
-
-                _director_role_element = create_bibliography_namespaced_element("Director")
-
-                if _person_director_creators:
-                    _name_list_element = create_bibliography_namespaced_element("NameList")
-
-                    for _creator in _person_director_creators:
-                        _creator.creator_data.map_to_bibxml(_name_list_element)
-
-                    _director_role_element.append(_name_list_element)
-
-                if list(_director_role_element):
-                    _author_composite_element.append(_director_role_element)
-
-            # Role: Performer
-            _performer_creators = [
-                _creator for _creator in self.creators
-                if _creator.creator_type == ZoteroCreatorType.PERFORMER
-            ]
-
-            if _performer_creators:
-                _person_performer_creators = [
-                    _performer_creator for _performer_creator in _performer_creators
-                    if isinstance(_performer_creator.creator_data, ZoteroPersonCreatorData)
-                ]
-
-                _performer_role_element = create_bibliography_namespaced_element("Performer")
-
-                if _person_performer_creators:
-                    _name_list_element = create_bibliography_namespaced_element("NameList")
-
-                    for _creator in _person_performer_creators:
-                        _creator.creator_data.map_to_bibxml(_name_list_element)
-
-                    _performer_role_element.append(_name_list_element)
-
-                if list(_performer_role_element):
-                    _author_composite_element.append(_performer_role_element)
-
-            # Role: Inventor
-            _inventor_creators = [
-                _creator for _creator in self.creators
-                if _creator.creator_type == ZoteroCreatorType.INVENTOR
-            ]
-
-            if _inventor_creators:
-                _person_inventor_creators = [
-                    _inventor_creator for _inventor_creator in _inventor_creators
-                    if isinstance(_inventor_creator.creator_data, ZoteroPersonCreatorData)
-                ]
-
-                _inventor_role_element = create_bibliography_namespaced_element("Inventor")
-
-                if _person_inventor_creators:
-                    _name_list_element = create_bibliography_namespaced_element("NameList")
-
-                    for _creator in _person_inventor_creators:
-                        _creator.creator_data.map_to_bibxml(_name_list_element)
-
-                    _inventor_role_element.append(_name_list_element)
-
-                if list(_inventor_role_element):
-                    _author_composite_element.append(_inventor_role_element)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+                ZoteroCreatorType.AUTHOR,
+                ZoteroCreatorType.CONTRIBUTOR,
+                ZoteroCreatorType.REVIEWED_AUTHOR,
+                ZoteroCreatorType.COMMENTER,
+                ZoteroCreatorType.PROGRAMMER,
+                ZoteroCreatorType.RECIPIENT
+            ), "Author", True)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+                ZoteroCreatorType.BOOK_AUTHOR,
+            ),"BookAuthor", False)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+                ZoteroCreatorType.EDITOR,
+                ZoteroCreatorType.SERIES_EDITOR
+            ),"Editor", False)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+                ZoteroCreatorType.TRANSLATOR,
+            ),"Translator", False)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+                ZoteroCreatorType.PRODUCER,
+                ZoteroCreatorType.SPONSOR,
+                ZoteroCreatorType.COSPONSOR
+            ),"ProducerName", False)
+            #add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (ZoteroCreatorType.UNKNOWN,), "Compiler", False) - No direct mapping from Zotero
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+                ZoteroCreatorType.ARTIST,
+                ZoteroCreatorType.CARTOGRAPHER
+            ),"Artist", False)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators,(
+                ZoteroCreatorType.COMPOSER,
+            ), "Composer", False)
+            #add_bibliography_namespaced_role_element(_author_composite_element, self.creators,(ZoteroCreatorType.UNKNOWN,), "Conductor", False) - No direct mapping from Zotero
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+                ZoteroCreatorType.PERFORMER,
+                ZoteroCreatorType.CAST_MEMBER,
+                ZoteroCreatorType.PRESENTER,
+            ),"Performer", True)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+                ZoteroCreatorType.DIRECTOR,
+            ),"Director", False)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+                ZoteroCreatorType.SCRIPT_WRITER,
+                ZoteroCreatorType.WORDS_BY
+            ),"Writer", False)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators,(
+                ZoteroCreatorType.INTERVIEWEE,
+                ZoteroCreatorType.GUEST
+            ), "Interviewee", False)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators,(
+                ZoteroCreatorType.INTERVIEWER,
+                ZoteroCreatorType.PODCASTER
+            ), "Interviewer", False)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+                ZoteroCreatorType.INVENTOR,
+            ),"Inventor", False)
+            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+                ZoteroCreatorType.COUNSEL,
+                ZoteroCreatorType.ATTORNEY_AGENT
+            ),"Counsel", False)
 
             if list(_author_composite_element):
                 _source_element.append(_author_composite_element)

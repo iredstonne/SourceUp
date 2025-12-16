@@ -59,12 +59,9 @@ def add_bibliography_namespaced_role_element(_author_composite_element: Element,
         _author_composite_element.append(_role_element)
 
 def export_as_bibxml_to_output_file(_items: Iterable[ZoteroItem], _output_file_save_path: str) -> str:
-    # <b:Sources>
     _sources_element = create_bibliography_namespaced_element("Sources")
     for _item in _items:
-        # <b:Source>
         _source_element = create_bibliography_namespaced_element("Source")
-        # <b:Tag>
         _tag_element = create_bibliography_namespaced_element("Tag")
         _tag_element.text = _item.item_key
         _source_element.append(_tag_element)

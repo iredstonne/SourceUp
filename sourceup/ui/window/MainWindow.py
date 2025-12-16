@@ -2,9 +2,9 @@ from typing import Optional, List, Iterable
 from PySide6.QtCore import QModelIndex, QSignalBlocker, QAbstractListModel
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QPushButton, QListView,
-    QSplitter, QMessageBox, QDialog, QSizePolicy, QFileDialog
+    QSplitter, QMessageBox, QDialog, QSizePolicy, QFileDialog, QLabel
 )
-from sourceup.client.zotero_functions import fetch_collections, fetch_collection_items, decipher_client_error
+from sourceup.client.zotero_functions import fetch_collections, fetch_collection_items, fetch_items, decipher_client_error
 from sourceup.exporter.wordbibxml_functions import decipher_bibxml_export_error, export_as_bibxml_to_output_file
 from sourceup.library.ZoteroLibrary import ZoteroLibrary
 from sourceup.collection.ZoteroCollection import ZoteroCollection
@@ -83,6 +83,18 @@ class MainWindow(QMainWindow):
         return _manage_libraries_button
 
     @staticmethod
+    def _wrap_header_host_with_list_view(
+        _header_host: QWidget,
+        _list_view: QListView
+    ) -> QWidget:
+        _host = QWidget()
+        _layout = QVBoxLayout(_host)
+        _layout.setContentsMargins(0, 0, 0, 0)
+        _layout.addWidget(_header_host, 0)
+        _layout.addWidget(_list_view, 1)
+        return _host
+
+    @staticmethod
     def _create_list_view(
         _list_model: QAbstractListModel,
         _on_changed_slot: object
@@ -101,6 +113,21 @@ class MainWindow(QMainWindow):
         self._collection_list_view.setSelectionMode(QListView.SelectionMode.SingleSelection)
         return self._collection_list_view
 
+    def _build_my_library_button(self) -> QPushButton:
+        self._my_library_button = QPushButton("My Library")
+        self._my_library_button.setToolTip("Show all items in the current library")
+        self._my_library_button.setEnabled(bool(self._libraries))
+        self._my_library_button.clicked.connect(self._on_my_library_button_clicked)
+        return self._my_library_button
+
+    def _wrap_header_host_with_collection_list_view(self):
+        _header_host = QWidget()
+        _header_layout = QHBoxLayout(_header_host)
+        _header_layout.setContentsMargins(0, 0, 0, 0)
+        _header_layout.addWidget(QLabel("Collections"))
+        _header_layout.addWidget(self._build_my_library_button())
+        return self._wrap_header_host_with_list_view(_header_host, self._build_collection_list_view())
+
     def _build_collection_item_list_view(self) -> QListView:
         self._collection_item_list_view = self._create_list_view(
             self._collection_item_list_model,
@@ -118,7 +145,7 @@ class MainWindow(QMainWindow):
         _splitter_a_host = QSplitter()
         _splitter_a_host.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         _splitter_a_host.setStyleSheet("QSplitter::handle { background-color: #cccccc; }")
-        _splitter_a_host.addWidget(self._build_collection_list_view())
+        _splitter_a_host.addWidget(self._wrap_header_host_with_collection_list_view())
         _splitter_b_host = QSplitter()
         _splitter_b_host.addWidget(self._build_collection_item_list_view())
         _splitter_b_host.addWidget(self._build_collection_item_data_preview())
@@ -288,12 +315,43 @@ class MainWindow(QMainWindow):
             return
         self._export_collection_items()
 
+    def _on_fetch_my_library_items_worker_fn_finished(self, _fetched_my_library_items_rows: Iterable[ZoteroItem]):
+        self._collection_item_list_model.set_rows(_fetched_my_library_items_rows)
+        self._collection_list_view.clearSelection()
+        self._collection_list_view.setCurrentIndex(QModelIndex())
+        self._collection_item_list_view.clearSelection()
+        self._collection_item_list_view.setCurrentIndex(QModelIndex())
+        self._collection_item_list_view.setFocus()
+        self._refresh_collection_item_data_preview()
+
+    def _on_fetch_my_library_items_worker_fn_error(self, e: Exception):
+        QMessageBox.critical(self, "Zotero", (
+            "Failed to fetch items from Zotero:\n\n"
+            f"{decipher_client_error(e)}"
+        ))
+
+    def _on_my_library_button_clicked(self):
+        _selected_library = self._selected_library
+        if not _selected_library:
+            return
+        self._collection_list_view.clearSelection()
+        self._collection_list_view.setCurrentIndex(QModelIndex())
+        self._library_fetch_background_job_runner.run(
+            fetch_items,
+            self._on_fetch_my_library_items_worker_fn_finished,
+            self._on_fetch_my_library_items_worker_fn_error,
+            _selected_library
+        )
+
     def _populate_library_combo(self):
         self._library_combo.clear()
         for _library in self._libraries:
             self._library_combo.addItem(str(_library), _library)
         if self._libraries:
             self._library_combo.setCurrentIndex(0)
+            self._my_library_button.setEnabled(True)
+        else:
+            self._my_library_button.setEnabled(False)
 
     def _on_manage_libraries_button_click(self):
         _manage_libraries_dialog = ZoteroManageLibrariesDialog(self._libraries, self)

@@ -5,6 +5,7 @@ from xml.etree.ElementTree import Element
 from dateparser import parse
 from sourceup.casts import map_to_str
 from sourceup.creator.ZoteroCreator import ZoteroCreator
+from sourceup.creator.ZoteroCreatorType import ZoteroCreatorType
 from sourceup.exporter.wordbibxml_functions import create_bibliography_namespaced_element, \
     add_bibliography_namespaced_role_element
 from sourceup.item.ZoteroItemType import ZoteroItemType
@@ -62,9 +63,12 @@ class ZoteroBaseItemData:
             extra=map_to_str(_data.get("extra"))
         )
 
+    def map_creators_to_bibxml(self, _author_composite_element: Element):
+        pass
+
     def map_to_bibxml(self, _source_element: Element):
         # SourceType: Mapped (delegated)
-        # Creators: Partially mapped (not delegated yet)
+        # Creators: Mapped (delegated)
         # Title: Mapped (title)
         # Year: Mapped (date -> year)
         # Month: Mapped (date -> month)
@@ -90,65 +94,7 @@ class ZoteroBaseItemData:
             from sourceup.creator.ZoteroCreatorType import ZoteroCreatorType
             _author_composite_element = create_bibliography_namespaced_element("Author")
 
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
-                ZoteroCreatorType.AUTHOR,
-                ZoteroCreatorType.CONTRIBUTOR,
-                ZoteroCreatorType.REVIEWED_AUTHOR,
-                ZoteroCreatorType.COMMENTER,
-                ZoteroCreatorType.PROGRAMMER,
-                ZoteroCreatorType.RECIPIENT
-            ), "Author", True)
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
-                ZoteroCreatorType.BOOK_AUTHOR,
-            ),"BookAuthor", False)
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
-                ZoteroCreatorType.EDITOR,
-                ZoteroCreatorType.SERIES_EDITOR
-            ),"Editor", False)
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
-                ZoteroCreatorType.TRANSLATOR,
-            ),"Translator", False)
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
-                ZoteroCreatorType.PRODUCER,
-                ZoteroCreatorType.SPONSOR,
-                ZoteroCreatorType.COSPONSOR
-            ),"ProducerName", False)
-            #add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (ZoteroCreatorType.UNKNOWN,), "Compiler", False) - No direct mapping from Zotero
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
-                ZoteroCreatorType.ARTIST,
-                ZoteroCreatorType.CARTOGRAPHER
-            ),"Artist", False)
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators,(
-                ZoteroCreatorType.COMPOSER,
-            ), "Composer", False)
-            #add_bibliography_namespaced_role_element(_author_composite_element, self.creators,(ZoteroCreatorType.UNKNOWN,), "Conductor", False) - No direct mapping from Zotero
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
-                ZoteroCreatorType.PERFORMER,
-                ZoteroCreatorType.CAST_MEMBER,
-                ZoteroCreatorType.PRESENTER,
-            ),"Performer", True)
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
-                ZoteroCreatorType.DIRECTOR,
-            ),"Director", False)
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
-                ZoteroCreatorType.SCRIPT_WRITER,
-                ZoteroCreatorType.WORDS_BY
-            ),"Writer", False)
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators,(
-                ZoteroCreatorType.INTERVIEWEE,
-                ZoteroCreatorType.GUEST
-            ), "Interviewee", False)
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators,(
-                ZoteroCreatorType.INTERVIEWER,
-                ZoteroCreatorType.PODCASTER
-            ), "Interviewer", False)
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
-                ZoteroCreatorType.INVENTOR,
-            ),"Inventor", False)
-            add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
-                ZoteroCreatorType.COUNSEL,
-                ZoteroCreatorType.ATTORNEY_AGENT
-            ),"Counsel", False)
+            self.map_creators_to_bibxml(_author_composite_element)
 
             if list(_author_composite_element):
                 _source_element.append(_author_composite_element)

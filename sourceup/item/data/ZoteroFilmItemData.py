@@ -2,7 +2,9 @@ from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
 from xml.etree.ElementTree import Element
 
-from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
+from sourceup.creator.ZoteroCreatorType import ZoteroCreatorType
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing, \
+    add_bibliography_namespaced_role_element
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
@@ -36,6 +38,21 @@ class ZoteroFilmItemData(ZoteroBaseItemData):
             video_recording_format=map_to_str(_data.get("videoRecordingFormat")),
             running_time=map_to_str(_data.get("runningTime"))
         )
+
+    @override
+    def map_creators_to_bibxml(self, _author_composite_element: Element):
+        add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+            ZoteroCreatorType.CONTRIBUTOR,
+        ), "Performer", True)
+        add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+            ZoteroCreatorType.PRODUCER,
+        ), "ProducerName", False)
+        add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+            ZoteroCreatorType.DIRECTOR,
+        ), "Director", False)
+        add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+            ZoteroCreatorType.SCRIPT_WRITER,
+        ), "Writer", False)
 
     @override
     def map_to_bibxml(self, _source_element: Element):

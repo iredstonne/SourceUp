@@ -2,7 +2,9 @@ from dataclasses import dataclass, fields
 from typing import override, Dict, Any
 from xml.etree.ElementTree import Element
 
-from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
+from sourceup.creator.ZoteroCreatorType import ZoteroCreatorType
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing, \
+    add_bibliography_namespaced_role_element
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 
@@ -27,6 +29,14 @@ class ZoteroInstantMessageItemData(ZoteroBaseItemData):
             **{_base_item_data_field.name: getattr(_base_item_data, _base_item_data_field.name)
                for _base_item_data_field in fields(ZoteroBaseItemData)}
         )
+
+    @override
+    def map_creators_to_bibxml(self, _author_composite_element: Element):
+        add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+            ZoteroCreatorType.AUTHOR,
+            ZoteroCreatorType.CONTRIBUTOR,
+            ZoteroCreatorType.RECIPIENT,
+        ), "Author", True)
 
     @override
     def map_to_bibxml(self, _source_element: Element):

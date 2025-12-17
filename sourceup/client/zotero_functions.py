@@ -1,4 +1,7 @@
+import socket
+import ssl
 from typing import TYPE_CHECKING, Iterable
+import httpx
 
 if TYPE_CHECKING: from sourceup.library.ZoteroLibrary import ZoteroLibrary
 if TYPE_CHECKING: from sourceup.collection.ZoteroCollection import ZoteroCollection
@@ -25,24 +28,52 @@ def decipher_client_error(e: Exception):
     import traceback
     print("".join(traceback.format_exception(type(e), e, e.__traceback__)))
 
-    from requests.exceptions import ConnectionError, ProxyError, SSLError, Timeout, ConnectTimeout, ReadTimeout, HTTPError
+    root_exception = e
+    seen_root_exception_id = set()
+    while True:
+        root_exception_id = id(root_exception)
+        if root_exception_id in seen_root_exception_id:
+            break
+        seen_root_exception_id.add(root_exception_id)
+        next_root_exception = getattr(root_exception, "__cause__", None) or getattr(root_exception, "__context__", None)
+        if not isinstance(next_root_exception, BaseException):
+            break
+        root_exception = next_root_exception
 
-    if isinstance(e, (ConnectionError, ProxyError)):
+    if isinstance(root_exception, socket.gaierror):
         return (
-            "Unable to reach Zotero.\n"
-            "Please check your Internet connection or network configuration."
+            "The domain name could not be resolved for Zotero.\n"
+            "Please check your network configuration and try again"
         )
-
-    if isinstance(e, SSLError):
+    elif isinstance(root_exception, ssl.SSLError):
         return (
             "Unable to tie a secure connection with Zotero.\n"
-            "Please check your system date and time settings or network configuration."
+            "Please check your system date/time and try again."
         )
-
-    if isinstance(e, (Timeout, ConnectTimeout, ReadTimeout)):
+    elif isinstance(root_exception, httpx.ProxyError):
         return (
-            "Zotero took too long to respond.\n"
-            "The operation timed out. Please try again in a moment."
+            "Proxy error occurred while reaching Zotero.\n"
+            "Please check your proxy configuration and try again."
+        )
+    elif isinstance(root_exception, ConnectionRefusedError):
+        return (
+            "Connection refused while reaching Zotero.\n"
+            "Please check your network configuration and try again"
+        )
+    elif isinstance(root_exception, ConnectionResetError):
+        return (
+            "Connection interrupted while reaching Zotero.\n"
+            "Please check your network stability and try again"
+        )
+    elif isinstance(root_exception, httpx.ConnectError):
+        return (
+            "Connection handshake failed while reaching Zotero.\n"
+            "Please check your network configuration and try again."
+        )
+    elif isinstance(root_exception, httpx.TimeoutException):
+        return (
+            "Connection timed out while reaching Zotero\n"
+            "Please try again in a moment."
         )
 
     return str(e)

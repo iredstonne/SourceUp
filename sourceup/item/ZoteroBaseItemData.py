@@ -91,7 +91,6 @@ class ZoteroBaseItemData:
             _source_element.append(_title_element)
 
         if self.creators:
-            from sourceup.creator.ZoteroCreatorType import ZoteroCreatorType
             _author_composite_element = create_bibliography_namespaced_element("Author")
 
             self.map_creators_to_bibxml(_author_composite_element)

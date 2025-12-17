@@ -30,6 +30,10 @@ class ZoteroNoteItemData(ZoteroBaseItemData):
         )
 
     @override
+    def map_creators_to_bibxml(self, _author_composite_element: Element):
+        pass
+
+    @override
     def map_to_bibxml(self, _source_element: Element):
         ZoteroBaseItemData.map_to_bibxml(self, _source_element)
 

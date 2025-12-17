@@ -2,7 +2,9 @@ from dataclasses import dataclass, fields
 from typing import Optional, override, Dict, Any
 from xml.etree.ElementTree import Element
 
-from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing
+from sourceup.creator.ZoteroCreatorType import ZoteroCreatorType
+from sourceup.exporter.wordbibxml_functions import add_bibliography_namespaced_element_if_missing, \
+    add_bibliography_namespaced_role_element
 from sourceup.item.ZoteroItemType import ZoteroItemType
 from sourceup.item.ZoteroBaseItemData import ZoteroBaseItemData
 from sourceup.casts import map_to_str
@@ -40,6 +42,13 @@ class ZoteroStandardItemData(ZoteroBaseItemData):
             version_number=map_to_str(_data.get("versionNumber")),
             status=map_to_str(_data.get("status"))
         )
+
+    @override
+    def map_creators_to_bibxml(self, _author_composite_element: Element):
+        add_bibliography_namespaced_role_element(_author_composite_element, self.creators, (
+            ZoteroCreatorType.AUTHOR,
+            ZoteroCreatorType.CONTRIBUTOR
+        ), "Author", True)
 
     @override
     def map_to_bibxml(self, _source_element: Element):

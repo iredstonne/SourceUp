@@ -6,6 +6,11 @@ class WordBibXMLExportDialog(QDialog):
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
         self.setWindowTitle("Word BibXML")
+        self.setWindowFlags(
+            Qt.WindowType.Dialog
+            | Qt.WindowType.CustomizeWindowHint
+            | Qt.WindowType.WindowTitleHint
+        )
         self.setModal(True)
         self._layout = QVBoxLayout()
         self._label = QLabel("Exporting to Word BibXML…", self)

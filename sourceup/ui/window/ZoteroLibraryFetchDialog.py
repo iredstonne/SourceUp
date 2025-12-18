@@ -17,3 +17,6 @@ class ZoteroLibraryFetchDialog(QDialog):
         self._label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._layout.addWidget(self._label)
         self.setLayout(self._layout)
+
+    def closeEvent(self, event):
+        event.ignore()

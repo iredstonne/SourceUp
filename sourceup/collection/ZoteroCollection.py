@@ -5,8 +5,6 @@ class ZoteroCollection:
     collection_key: str
     collection_name: str
 
-    def __repr__(self):
+    @property
+    def model_name(self):
         return self.collection_name
-
-    def __str__(self):
-        return self.__repr__()

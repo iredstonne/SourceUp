@@ -9,8 +9,6 @@ class ZoteroItem:
     item_data: "ZoteroBaseItemData"
     item_type: "ZoteroItemType"
 
-    def __repr__(self):
+    @property
+    def model_name(self):
         return self.item_data.title
-
-    def __str__(self):
-        return self.__repr__()

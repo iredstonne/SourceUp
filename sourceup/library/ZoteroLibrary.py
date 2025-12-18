@@ -12,8 +12,6 @@ class ZoteroLibrary:
     def access_level(self):
         return "Private" if self.private_key else "Public"
 
-    def __repr__(self):
+    @property
+    def model_name(self):
         return f"{self.library_type.upper()}: {self.library_id} ({self.access_level})"
-
-    def __str__(self):
-        return self.__repr__()

@@ -19,7 +19,7 @@ class ZoteroLibraryDataProvider(DataProviderProtocol[ZoteroLibrary]):
             case ZoteroLibraryDataProvider.LIBRARY_USER_ROLE:
                 return _library
             case DataProviderProtocol.DISPLAY_ROLE | DataProviderProtocol.TOOLTIP_ROLE:
-                return str(_library)
+                return _library.model_name
 
     @override
     def flags(self, _library: ZoteroLibrary) -> Union[Qt.ItemFlag]:

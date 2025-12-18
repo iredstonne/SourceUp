@@ -1,11 +1,9 @@
-from typing import TypeVar, List, Iterable, Optional
-from sourceup.ui.model.storage.StorageProtocol import StorageProtocol
+from typing import TypeVar, Iterable, Optional
+from sourceup.ui.model.data_storage.DataListStorageProtocol import DataListStorageProtocol
 
 T = TypeVar("T")
 
-class InMemoryStorage(StorageProtocol[T]):
-    _items: List[T] = []
-
+class InMemoryDataListStorage(DataListStorageProtocol[T]):
     def __init__(self, initial_items: Optional[Iterable[T]] = None):
         self._items = list(initial_items or [])
 
@@ -34,6 +32,3 @@ class InMemoryStorage(StorageProtocol[T]):
 
     def in_bounds(self, _index: int) -> bool:
         return 0 <= _index < self.count()
-
-    def flush(self) -> None:
-        raise NotImplementedError("flush() is not supported for InMemoryStorage")

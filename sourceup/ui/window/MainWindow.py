@@ -364,7 +364,7 @@ class MainWindow(QMainWindow):
     def _populate_library_combo(self):
         self._library_combo.clear()
         for _library in self._libraries:
-            self._library_combo.addItem(str(_library), _library)
+            self._library_combo.addItem(_library.model_name, _library)
         if self._libraries:
             self._library_combo.setCurrentIndex(0)
             self._my_library_button.setEnabled(True)

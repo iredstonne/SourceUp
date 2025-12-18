@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Optional, List, Iterable
 from PySide6.QtCore import QModelIndex, QSignalBlocker, QAbstractListModel
 from PySide6.QtWidgets import (
@@ -9,6 +10,9 @@ from sourceup.exporter.wordbibxml_functions import decipher_bibxml_export_error,
 from sourceup.library.ZoteroLibrary import ZoteroLibrary
 from sourceup.collection.ZoteroCollection import ZoteroCollection
 from sourceup.item.ZoteroItem import ZoteroItem
+from sourceup.library.ZoteroLibraryType import ZoteroLibraryType
+from sourceup.settings.Settings import Settings
+from sourceup.settings.data.ZoteroLibraryData import ZoteroLibraryData
 from sourceup.ui.model.ZoteroCollectionListModel import ZoteroCollectionListModel
 from sourceup.ui.model.ZoteroItemListModel import ZoteroItemListModel
 from sourceup.ui.background.BackgroundJobRunner import BackgroundJobRunner
@@ -26,7 +30,16 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle(f"{app.applicationName()} {app.applicationVersion()}")
         self.resize(1280, 720)
-        self._libraries: list[ZoteroLibrary] = []
+        self._settings = Settings(Path.cwd() / ".sourceup" / "settings.json")
+        self._settings_data = self._settings.load()
+        self._libraries: list[ZoteroLibrary] = [
+            ZoteroLibrary(
+                library_type=ZoteroLibraryType.__members__.get(library.library_type, ZoteroLibraryType.USER),
+                library_id=library.library_id or "",
+                private_key=library.private_key or "",
+            )
+            for library in self._settings_data.libraries
+        ]
         self._selected_library: Optional[ZoteroLibrary] = None
         self._collection_list_model = ZoteroCollectionListModel()
         self._collection_item_list_model = ZoteroItemListModel()
@@ -39,6 +52,7 @@ class MainWindow(QMainWindow):
             WordBibXMLExportDialogBackgroundJobPresentation()
         )
         self._build_root()
+        self._populate_library_combo()
 
     def _build_root(self):
         _root_host = QWidget()
@@ -155,6 +169,10 @@ class MainWindow(QMainWindow):
         _splitter_a_host.setStretchFactor(0, 1)
         _splitter_a_host.setStretchFactor(1, 4)
         return _splitter_a_host
+
+    def closeEvent(self, event):
+        self._settings.dispose()
+        super().closeEvent(event)
 
     def _get_selected_collection(self) -> Optional[ZoteroCollection]:
         _collection_list_view_selection_model = self._collection_list_view.selectionModel()
@@ -354,10 +372,19 @@ class MainWindow(QMainWindow):
             self._my_library_button.setEnabled(False)
 
     def _on_manage_libraries_button_click(self):
-        _manage_libraries_dialog = ZoteroManageLibrariesDialog(self._libraries, self)
-        if _manage_libraries_dialog.exec() == QDialog.DialogCode.Accepted:
-            self._libraries = _manage_libraries_dialog.libraries
+        dialog = ZoteroManageLibrariesDialog(self._libraries, self)
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            self._libraries = dialog.libraries
             self._populate_library_combo()
+            self._settings_data.libraries = [
+                ZoteroLibraryData(
+                    library_type=library.library_type or "",
+                    library_id=library.library_id or "",
+                    private_key=library.private_key or ""
+                )
+                for library in self._libraries
+            ]
+            self._settings.save(self._settings_data)
 
     @property
     def libraries(self) -> List[ZoteroLibrary]:

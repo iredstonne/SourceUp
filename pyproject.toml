@@ -12,6 +12,7 @@ pyside6 = "^6.9.2"
 pyinstaller = "^6.16.0"
 pyzotero = "^1.6.16"
 dateparser = "^1.2.2"
+pydantic = "^2.12.5"
 
 [tool.poetry.scripts]
 sourceup = "sourceup.app:main"

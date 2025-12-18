@@ -1,6 +1,6 @@
 from typing import Optional
 from PySide6.QtWidgets import QWidget
-from sourceup.ui.window.WordBibXMLExportDialog import WordBibXMLExportDialog
+from sourceup.ui.dialog.WordBibXMLExportDialog import WordBibXMLExportDialog
 
 class WordBibXMLExportDialogBackgroundJobPresentation:
     _dialog: Optional[WordBibXMLExportDialog]

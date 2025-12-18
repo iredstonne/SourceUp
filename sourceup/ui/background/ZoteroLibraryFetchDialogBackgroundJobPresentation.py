@@ -1,6 +1,6 @@
 from typing import Optional
 from PySide6.QtWidgets import QWidget
-from sourceup.ui.window.ZoteroLibraryFetchDialog import ZoteroLibraryFetchDialog
+from sourceup.ui.dialog.ZoteroLibraryFetchDialog import ZoteroLibraryFetchDialog
 
 class ZoteroLibraryFetchDialogBackgroundJobPresentation:
     _dialog: Optional[ZoteroLibraryFetchDialog]

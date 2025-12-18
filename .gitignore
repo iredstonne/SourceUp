@@ -2,3 +2,4 @@
 poetry.lock
 dist
 build_cache
+.sourceup

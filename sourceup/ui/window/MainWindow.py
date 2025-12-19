@@ -170,10 +170,6 @@ class MainWindow(QMainWindow):
         _splitter_a_host.setStretchFactor(1, 4)
         return _splitter_a_host
 
-    def closeEvent(self, event):
-        self._settings.dispose()
-        super().closeEvent(event)
-
     def _get_selected_collection(self) -> Optional[ZoteroCollection]:
         _collection_list_view_selection_model = self._collection_list_view.selectionModel()
         if _collection_list_view_selection_model is None:
@@ -303,7 +299,7 @@ class MainWindow(QMainWindow):
     def _export_collection_items(self):
         _selected_collection_items = self._get_selected_collection_items()
         if not _selected_collection_items:
-            QMessageBox.information(self, "No collection items","Please choose at least one collection item before exporting as Word BibXML.")
+            QMessageBox.information(self, "No item(s)","Please choose at least one item before exporting as Word BibXML.")
             return
         _output_file_save_dialog = QFileDialog(self)
         _output_file_save_dialog.setWindowTitle("Export Word BibXML as ...")

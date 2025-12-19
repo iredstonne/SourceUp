@@ -323,10 +323,6 @@ class MainWindow(QMainWindow):
         if not _selected_library:
             QMessageBox.information(self, "No library", "Please choose a library first before exporting as Word BibXML.")
             return
-        _selected_collection = self._get_selected_collection()
-        if not _selected_collection:
-            QMessageBox.information(self, "No collection", "Please choose a collection first before exporting as Word BibXML.")
-            return
         self._export_collection_items()
 
     def _on_fetch_my_library_items_worker_fn_finished(self, _fetched_my_library_items_rows: Iterable[ZoteroItem]):

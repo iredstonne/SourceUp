@@ -1,5 +1,15 @@
 # SourceUp
 **SourceUp** is a desktop app that bridges your **Zotero** library with **Microsoft Word**'s native bibliography system.
+<table>
+  <tr>
+    <td>
+      <img src="images/showcase-01.png" alt="SourceUp showcase 1">
+    </td>
+    <td>
+      <img src="images/showcase-02.png" alt="SourceUp showcase 2">
+    </td>
+  </tr>
+</table>
 
 ### Who is SourceUp for, and why use it?
 

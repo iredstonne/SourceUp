@@ -1,15 +1,5 @@
 # SourceUp
 **SourceUp** is a desktop app that bridges your **Zotero** library with **Microsoft Word**'s native bibliography system.
-<table>
-  <tr>
-    <td>
-      <img src="images/showcase-01.png" alt="SourceUp showcase 1">
-    </td>
-    <td>
-      <img src="images/showcase-02.png" alt="SourceUp showcase 2">
-    </td>
-  </tr>
-</table>
 
 ### Who is SourceUp for, and why use it?
 
@@ -30,6 +20,16 @@ SourceUp is designed for **students, researchers, and academic writers** who wan
 - Zotero as their single source of truth for references.
 - Microsoft Word as their main writing tool.
 - Fewer manual steps, less copy-pasting, and a cleaner, more reliable bibliography.
+
+Here’s a quick showcase of what SourceUp looks like:
+
+<p align="center">
+  <img src="images/showcase-01.png" alt="SourceUp showcase 1">
+</p>
+
+<p align="center">
+  <img src="images/showcase-02.png" alt="SourceUp showcase 2">
+</p>
 
 ## 📦 Installation
 ### Option 1: Prebuilt Packages (Recommended)
